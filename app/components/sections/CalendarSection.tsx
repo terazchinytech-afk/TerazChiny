@@ -157,7 +157,7 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
 
                 <div className="pt-4 hidden min-[1110px]:block">
                   <Link
-                    href={header.ctaLink || "/kalendarz"}
+                    href={header.ctaLink || "/kalendarz-wypraw"}
                     className="inline-flex items-center gap-3 font-bold text-black hover:text-brand-red transition-colors group"
                   >
                     <div className="w-12 h-12 bg-brand-red text-white rounded-full flex items-center justify-center group-hover:bg-brand-red transition-colors duration-300">

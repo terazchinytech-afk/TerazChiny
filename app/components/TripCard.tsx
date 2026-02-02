@@ -68,6 +68,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 export const TripCard = ({ trip, index }: TripCardProps) => {
   const isSoldOut = trip.spots === "sold_out";
   const DESC_LIMIT = 240;
+  console.log(trip);
 
   return (
     <motion.div
@@ -136,7 +137,7 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
           </div>
 
           <Link
-            href={`/kalendarz-wypraw/${trip.id}`}
+            href={`/kalendarz-wypraw/${trip.slug}`}
             className="max-[550px]:ml-4"
           >
             {/* Przycisk zmienia się na mniejszy (tylko ikona lub krótki tekst) poniżej 550px */}
