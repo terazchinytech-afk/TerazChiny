@@ -1,65 +1,91 @@
-import Image from "next/image";
+// app/page.tsx
+import { Metadata } from "next";
+import { HeroSection } from "./components/sections/HeroSection";
+import { AboutSection } from "./components/sections/AboutSection";
+import { CalendarSection } from "./components/sections/CalendarSection";
+import { TestimonialsSection } from "./components/sections/TestimonialSection";
+import { BlogSection } from "./components/sections/BlogSection";
+import { FaqSection } from "./components/sections/FaqSection";
+import { ContactSection } from "./components/sections/ContactSection";
+import { Footer } from "./components/Footer";
+import { getLandingPageData } from "./lib/api";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+// --- DYNAMICZNE METADANE (SEO) ---
+export async function generateMetadata(): Promise<Metadata> {
+  const sanityData = await getLandingPageData();
+  const seo = sanityData?.seo;
+
+  const baseUrl = process.env.NEXT_PUBLIC_URL
+    ? `https://${process.env.NEXT_PUBLIC_URL}`
+    : "http://localhost:3000";
+
+  const title = seo?.metaTitle || "Teraz Chiny - Wyprawy do Państwa Środka";
+  const description =
+    seo?.metaDescription ||
+    "Organizujemy świadome wyjazdy do Chin, łącząc kulturę, biznes i autentyczne doświadczenia.";
+  const images = seo?.ogImage ? [seo.ogImage] : ["/heroBackground.png"];
+
+  return {
+    metadataBase: new URL(baseUrl),
+    title: title,
+    description: description,
+    keywords: seo?.keywords || ["Chiny", "Wyprawy", "Podróże", "Azja"],
+
+    openGraph: {
+      title: title,
+      description: description,
+      url: "/",
+      siteName: "Teraz Chiny",
+      locale: "pl_PL",
+      type: "website",
+      images: [
+        {
+          url: images[0],
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: images,
+    },
+  };
+}
+
+// --- GŁÓWNY KOMPONENT STRONY ---
+export default async function Home() {
+  const sanityData = await getLandingPageData();
+
+  if (!sanityData) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-brand-white">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Brak danych</h1>
+          <p>Upewnij się, że opublikowałeś dokument w Sanity.</p>
         </div>
       </main>
-    </div>
+    );
+  }
+  console.log(sanityData.testimonialsSection);
+
+  return (
+    <main className="min-h-screen flex flex-col bg-brand-white">
+      <HeroSection data={sanityData.heroSection} />
+      <AboutSection data={sanityData.aboutSection} />
+      <CalendarSection data={sanityData.calendarSection} />
+      <TestimonialsSection data={sanityData.testimonialsSection} />
+      <BlogSection
+        headerData={sanityData.blogSection}
+        posts={sanityData.blogSection?.latestPosts || []}
+      />
+      <FaqSection data={sanityData.faqSection} />
+      <ContactSection data={sanityData.contactSection} />
+      <Footer data={sanityData.footer} />
+    </main>
   );
 }
