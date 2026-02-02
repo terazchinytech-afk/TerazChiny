@@ -18,6 +18,11 @@ export async function getLandingPageData() {
         images {
           "mainImage": mainImage.asset->url,
           "secondaryImage": secondaryImage.asset->url
+        },
+        // Pobieramy dane dla nowej sekcji z chińskimi przewodnikami
+        differentiation {
+          ...,
+          "sideImage": sideImage.asset->url
         }
       },
       calendarSection {
@@ -44,17 +49,27 @@ export async function getLandingPageData() {
           rating,
           content,
           date,
-         // Pobieramy dedykowane zdjęcie z opinii
           "reviewImage": reviewImage.asset->url,
-          // Pobieramy dane wyprawy jako backup
           "trip": trip-> {
             title,
             "mainImage": mainImage.asset->url
           }
         }
       },
-      blogSection { ... },
-      faqSection { ... },
+      // Rozszerzyłem blogSection i faqSection o konkretne pola zamiast {...}
+      blogSection {
+        header,
+        ctaText,
+        postsSettings
+      },
+      faqSection {
+        header,
+        contactCtaText,
+        items[] {
+          question,
+          answer
+        }
+      },
       contactSection {
         ...,
         "heroImage": heroImage.asset->url,
@@ -78,6 +93,8 @@ export async function getLandingPageData() {
 
   const data = await client.fetch(query);
 
+  // LOGIKA AUTOMATYCZNYCH POSTÓW:
+  // Jeśli tryb jest ustawiony na "latest" lub brak ustawień, dociągamy posty
   if (
     data?.blogSection?.postsSettings?.mode === "automatic_latest" ||
     !data?.blogSection?.postsSettings
@@ -85,7 +102,7 @@ export async function getLandingPageData() {
     const postsQuery = `
       *[_type == "post"] | order(publishedAt desc)[0..2] {
         title,
-        slug,
+        "slug": slug.current,
         publishedAt,
         excerpt,
         category,
@@ -100,7 +117,7 @@ export async function getLandingPageData() {
   return data;
 }
 
-// 2. DANE DLA STRONY KALENDARZ (Poprawione przecinki)
+// 2. DANE DLA STRONY KALENDARZ
 export async function getCalendarPageData() {
   const query = `
     *[_type == "calendarPage"][0] {
@@ -110,14 +127,14 @@ export async function getCalendarPageData() {
         titlePart2,
         description,
         "heroImage": heroImage.asset->url
-      }, // <--- TU BRAKOWAŁO PRZECINKA
+      },
       filterSection {
         title,
         subtitle,
         locationLabel,
         dateLabel,
         buttonText
-      }, // <--- TU TEŻ WARTO DAĆ PRZECINEK
+      },
       seo {
         metaTitle,
         metaDescription,
@@ -135,7 +152,7 @@ export async function getAllTrips() {
     *[_type == "trip"] | order(date asc) {
       "id": _id,
       title,
-      slug,
+      "slug": slug.current,
       date,
       duration,
       price,
@@ -148,11 +165,7 @@ export async function getAllTrips() {
   return client.fetch(query);
 }
 
-// lib/api.ts
-
-// ... (pozostałe funkcje: getLandingPageData, getCalendarPageData itp.)
-
-// NOWA FUNKCJA: Pobierz jedną wyprawę po slugu
+// 4. POBIERZ WYPRAWĘ PO SLUGU
 export async function getTripBySlug(slug: string) {
   const query = `
     *[_type == "trip" && slug.current == $slug][0] {
@@ -170,17 +183,16 @@ export async function getTripBySlug(slug: string) {
       faq,
       bookingUrl,
       "mainImage": mainImage.asset->url,
-      // Pola SEO:
       seoTitle,
       seoDescription,
       seoKeywords,
       "ogImage": ogImage.asset->url
     }
   `;
-
   return client.fetch(query, { slug });
 }
 
+// 5. BLOG - LISTA POSTÓW
 export async function getAllPosts() {
   const query = `
     *[_type == "post"] | order(publishedAt desc) {
@@ -189,7 +201,7 @@ export async function getAllPosts() {
       excerpt,
       "slug": slug.current,
       "date": publishedAt,
-      "category": category,
+      category,
       "image": mainImage.asset->url,
       readingTime
     }
@@ -197,6 +209,7 @@ export async function getAllPosts() {
   return client.fetch(query);
 }
 
+// 6. POJEDYNCZY POST
 export async function getPostBySlug(slug: string) {
   const query = `
     *[_type == "post" && slug.current == $slug][0] {
@@ -207,7 +220,6 @@ export async function getPostBySlug(slug: string) {
       readingTime,
       keywords,
       "mainImage": mainImage.asset->url,
-      // Pobieramy body i upewniamy się, że obrazki wewnątrz mają URL
       body[] {
         ...,
         _type == "image" => {
@@ -220,6 +232,7 @@ export async function getPostBySlug(slug: string) {
   return client.fetch(query, { slug });
 }
 
+// 7. REKOMENDACJE (Wykluczamy obecny post)
 export async function getRecommendedPosts(currentSlug: string) {
   const query = `
     *[_type == "post" && slug.current != $currentSlug] | order(publishedAt desc)[0...3] {
@@ -232,6 +245,8 @@ export async function getRecommendedPosts(currentSlug: string) {
   `;
   return client.fetch(query, { currentSlug });
 }
+
+// 8. STOPKA
 export async function getFooterData() {
   const query = `
     *[_type == "landingPage"][0] {

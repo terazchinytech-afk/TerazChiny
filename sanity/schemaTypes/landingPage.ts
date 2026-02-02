@@ -103,7 +103,7 @@ export const landingPage = defineType({
         }),
         defineField({
           name: "images",
-          title: "Zdjęcia",
+          title: "Zdjęcia (Górny blok)",
           type: "object",
           fields: [
             defineField({
@@ -120,15 +120,58 @@ export const landingPage = defineType({
             }),
           ],
         }),
+
+        // --- NOWA SEKCJA: WYRÓŻNIKI (ODWRÓCONY LAYOUT) ---
+        defineField({
+          name: "differentiation",
+          title: "Nasze Wyróżniki (Blok dolny - odwrócony)",
+          type: "object",
+          fields: [
+            defineField({
+              name: "title",
+              title: "Nagłówek wyróżników",
+              type: "string",
+              initialValue:
+                "Podróżuj z lokalnymi ekspertami, nie z przewodnikami z biura.",
+            }),
+            defineField({
+              name: "longDescription",
+              title: "Dłuższy opis (Lokalni przewodnicy)",
+              type: "text",
+              rows: 5,
+              description:
+                "Opisz tutaj szczegółowo rodowitych przewodników i autentyczność wypraw.",
+            }),
+            defineField({
+              name: "flexibilityTitle",
+              title: "Tytuł elastyczności",
+              type: "string",
+              initialValue: "Luźna atmosfera i elastyczność",
+            }),
+            defineField({
+              name: "flexibilityDesc",
+              title: "Opis elastyczności",
+              type: "text",
+              rows: 3,
+              description: "Opis braku drylu i partnerskiego podejścia.",
+            }),
+            defineField({
+              name: "sideImage",
+              title: "Zdjęcie po prawej stronie",
+              type: "image",
+              options: { hotspot: true },
+              description:
+                "Zdjęcie, które pojawi się w dolnym bloku po prawej stronie.",
+            }),
+          ],
+        }),
+
         defineField({
           name: "statistics",
           title: "Statystyki",
           type: "array",
-
-          // --- TUTAJ JEST OGRANICZENIE ---
           validation: (Rule) =>
             Rule.max(3).error("Możesz dodać maksymalnie 3 karty statystyk."),
-          // -------------------------------
           of: [
             {
               type: "object",
