@@ -1,10 +1,20 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography"; // Importujemy wtyczkę
 
 const config: Config = {
-  // ... reszta konfiguracji
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      // Twoje kolory i ustawienia
+    },
+  },
   plugins: [
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("@tailwindcss/typography"),
+    typography, // Używamy zaimportowanej zmiennej
   ],
 };
+
 export default config;
