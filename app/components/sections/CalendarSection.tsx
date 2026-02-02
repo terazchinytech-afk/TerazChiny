@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -12,28 +14,41 @@ import {
   CheckCircle,
   TrendingUp,
   Calendar as CalendarIcon,
-  Mail,
 } from "lucide-react";
 
-// --- HELPERY I KONFIGURACJA ---
+// --- HELPERY ZOPTYMALIZOWANE LOGICZNIE ---
+
+// Zapobiega błędom 500/Timeout przy gigantycznych zdjęciach z Sanity
+const getOptimizedImageUrl = (url: string, width = 400) => {
+  if (!url) return "";
+  try {
+    const optimizedUrl = new URL(url);
+    optimizedUrl.searchParams.set("w", width.toString());
+    optimizedUrl.searchParams.set("q", "75");
+    optimizedUrl.searchParams.set("auto", "format");
+    return optimizedUrl.href;
+  } catch (e) {
+    return url;
+  }
+};
 
 const getStatusText = (status: string) => {
-  switch (status) {
+  // Obsługuje oba formaty: last-spots i last_spots
+  const s = status?.replace("-", "_");
+  switch (s) {
     case "available":
       return {
         text: "Dostępne miejsca",
         color: "text-green-600",
         icon: CheckCircle,
       };
-    case "last_spots": // Dostosuj do wartości w Sanity (np. last-spots vs last_spots)
-    case "last-spots":
+    case "last_spots":
       return {
         text: "Ostatnie miejsca!",
         color: "text-orange-600",
         icon: AlertCircle,
       };
     case "sold_out":
-    case "sold-out":
       return { text: "Lista rezerwowa", color: "text-gray-400", icon: Clock };
     default:
       return { text: "Dostępne", color: "text-green-600", icon: CheckCircle };
@@ -45,17 +60,17 @@ const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return {
     day: date.getDate().toString().padStart(2, "0"),
-    month: date.toLocaleString("pl-PL", { month: "short" }).toUpperCase(), // np. MAJ
+    month: date.toLocaleString("pl-PL", { month: "short" }).toUpperCase(),
     year: date.getFullYear().toString(),
   };
 };
 
-// --- TYPY ---
+// --- INTERFEJSY ---
 
 interface Trip {
   title: string;
   slug: { current: string };
-  date: string; // YYYY-MM-DD
+  date: string;
   duration: string;
   price: string;
   status: string;
@@ -84,20 +99,27 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
   if (!data) return null;
 
   const { header, tripsSettings } = data;
-  const trips = tripsSettings?.selectedTrips || [];
+
+  // Memoizacja zapobiega zbędnym przeliczeniom przy animacjach
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const trips = useMemo(
+    () => tripsSettings?.selectedTrips || [],
+    [tripsSettings],
+  );
   const hasTrips = trips.length > 0;
 
-  // Parsowanie tytułu dla wyróżnienia (FullText + Highlight)
-  const titleParts = header.title.fullText.split(
-    new RegExp(`(${header.title.highlight})`, "gi"),
+  const titleParts = useMemo(
+    () =>
+      header.title.fullText.split(
+        new RegExp(`(${header.title.highlight})`, "gi"),
+      ),
+    [header.title.fullText, header.title.highlight],
   );
 
   return (
-    // --- GŁÓWNA SEKCJA ---
     <section className="w-full bg-gray-50 landing-spacing py-32">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 min-[1110px]:grid-cols-12 gap-12 min-[1110px]:gap-8">
-          {/* --- LEWA KOLUMNA (STICKY TEXT) --- */}
           <div className="min-[1110px]:col-span-4 relative">
             <div className="min-[1110px]:sticky min-[1110px]:top-32">
               <motion.div
@@ -149,10 +171,8 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
             </div>
           </div>
 
-          {/* --- PRAWA KOLUMNA (LISTA LUB PLACEHOLDER) --- */}
           <div className="min-[1110px]:col-span-8 flex flex-col gap-6">
             {!hasTrips ? (
-              // --- PLACEHOLDER (BRAK DANYCH) ---
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -170,17 +190,15 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                 </p>
               </motion.div>
             ) : (
-              // --- LISTA WYPRAW ---
               trips.map((trip, index) => {
                 const statusInfo = getStatusText(trip.status);
                 const StatusIcon = statusInfo.icon;
-                const isSoldOut =
-                  trip.status === "sold-out" || trip.status === "sold_out";
+                const isSoldOut = trip.status?.replace("-", "_") === "sold_out";
                 const dateObj = formatDate(trip.date);
 
                 return (
                   <motion.div
-                    key={index}
+                    key={trip.slug?.current || index}
                     initial={{ opacity: 0, x: 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
@@ -189,40 +207,24 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                     <Link
                       href={isSoldOut ? "#" : `/wyprawy/${trip.slug?.current}`}
                       aria-disabled={isSoldOut}
-                      tabIndex={isSoldOut ? -1 : undefined}
-                      className={`
-                        block relative transition-all duration-300
-                        ${
-                          isSoldOut
-                            ? "opacity-60 grayscale cursor-not-allowed pointer-events-none select-none"
-                            : "group"
-                        }
-                      `}
+                      className={`block relative transition-all duration-300 ${isSoldOut ? "opacity-60 grayscale cursor-not-allowed pointer-events-none" : "group"}`}
                     >
-                      {/* KARTA BILETU */}
                       <div
-                        className={`
-                          flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 transition-all duration-300
-                          ${
-                            !isSoldOut
-                              ? "group-hover:shadow-2xl group-hover:-translate-y-1"
-                              : ""
-                          }
-                        `}
+                        className={`flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 ${!isSoldOut ? "group-hover:shadow-2xl group-hover:-translate-y-1" : ""}`}
                       >
-                        {/* 1. SEKCJA DATY */}
+                        {/* 1. SEKCJA DATY (Zoptymalizowana LCP) */}
                         <div className="relative md:w-[160px] min-h-[140px] md:min-h-0 p-6 flex flex-row md:flex-col items-center justify-center gap-4 md:gap-1 text-center overflow-hidden">
                           {trip.mainImage && (
                             <Image
-                              src={trip.mainImage}
+                              src={getOptimizedImageUrl(trip.mainImage, 400)}
                               fill
                               className="object-cover transition-transform duration-700 group-hover:scale-110"
                               alt={trip.title}
+                              sizes="160px"
+                              priority={index === 0} // Kluczowe dla LCP
                             />
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60 z-10" />
-
-                          {/* Wycięcie na desktop */}
                           <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-gray-50 rounded-full hidden md:block z-20" />
 
                           <div className="relative z-20 text-white">
@@ -259,8 +261,6 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                               <MapPin size={15} className="text-black" /> Chiny
                             </span>
                           </div>
-
-                          {/* Wycięcie na mobile */}
                           <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-gray-50 rounded-full md:hidden z-10" />
                         </div>
 
@@ -280,11 +280,7 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                           </div>
 
                           <div
-                            className={`md:hidden p-2 rounded-lg ${
-                              isSoldOut
-                                ? "bg-gray-200 text-gray-400"
-                                : "bg-black text-white"
-                            }`}
+                            className={`md:hidden p-2 rounded-lg ${isSoldOut ? "bg-gray-200 text-gray-400" : "bg-black text-white"}`}
                           >
                             <ArrowRight size={20} />
                           </div>

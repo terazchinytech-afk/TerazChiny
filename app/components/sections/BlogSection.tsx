@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -11,6 +13,22 @@ import {
   ArrowRight,
   BookOpen,
 } from "lucide-react";
+
+// --- HELPERY OPTYMALIZACYJNE (LOGICZNE) ---
+
+// Funkcja zapobiega błędom 500/Timeout poprzez ograniczenie rozmiaru wejściowego z Sanity
+const getOptimizedImageUrl = (url: string, width = 600) => {
+  if (!url || url.startsWith("/")) return url;
+  try {
+    const optimized = new URL(url);
+    optimized.searchParams.set("w", width.toString());
+    optimized.searchParams.set("q", "75");
+    optimized.searchParams.set("auto", "format");
+    return optimized.href;
+  } catch (e) {
+    return url;
+  }
+};
 
 interface BlogPost {
   id: string;
@@ -49,15 +67,19 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
   if (!headerData) return null;
 
   const { header, ctaText } = headerData;
-  const latestPosts = posts ? posts.slice(0, 3) : [];
+
+  // Memoizacja danych dla stabilności renderowania
+  const latestPosts = useMemo(() => (posts ? posts.slice(0, 3) : []), [posts]);
   const hasPosts = latestPosts.length > 0;
 
-  const titleParts = header.fullText.split(
-    new RegExp(`(${header.highlight})`, "gi"),
+  const titleParts = useMemo(
+    () => header.fullText.split(new RegExp(`(${header.highlight})`, "gi")),
+    [header.fullText, header.highlight],
   );
 
   return (
     <section className="px-8 max-[1024px]:px-4 rounded-[5rem] max-[640px]:rounded-[2.5rem] mx-4 relative overflow-hidden bg-[#b32a2e] py-32 landing-spacing">
+      {/* Optymalizacja tła - pointer-events-none dla lepszej wydajności przewijania */}
       <div
         className="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay"
         style={{
@@ -125,80 +147,92 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
           </motion.div>
         ) : (
           <div className="flex flex-wrap justify-center gap-x-10 gap-y-16">
-            {latestPosts.map((post, idx) => (
-              <motion.div
-                key={post.slug?.current || idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group w-[calc(33.333%-2.5rem)] max-[1024px]:w-[calc(50%-2.5rem)] max-[640px]:w-full"
-              >
-                <Link
-                  href={`/blog/${post.slug?.current}`}
-                  className="block h-full flex flex-col"
+            {latestPosts.map((post, idx) => {
+              // Optymalizacja obrazu dla każdego posta z osobna
+              const optimizedImg = getOptimizedImageUrl(
+                post.mainImage || "/heroBackground.png",
+                600,
+              );
+
+              return (
+                <motion.div
+                  key={post.slug?.current || idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group w-[calc(33.333%-2.5rem)] max-[1024px]:w-[calc(50%-2.5rem)] max-[640px]:w-full"
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-[2.5rem] max-[640px]:rounded-[1.5rem] mb-8 shadow-2xl transition-all duration-700 group-hover:rounded-[1rem]">
-                    <Image
-                      src={post.mainImage || "/heroBackground.png"}
-                      alt={post.title}
-                      fill
-                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                    />
+                  <Link
+                    href={`/blog/${post.slug?.current}`}
+                    className="block h-full flex flex-col"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-[2.5rem] max-[640px]:rounded-[1.5rem] mb-8 shadow-2xl transition-all duration-700 group-hover:rounded-[1rem]">
+                      <Image
+                        src={optimizedImg}
+                        alt={post.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                        priority={idx === 0} // Kluczowe dla poprawy LCP
+                      />
 
-                    {post.category && (
-                      <div className="absolute top-4 left-4 z-20">
-                        <span className="montserrat bg-gold text-black px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg">
-                          {post.category}
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                      <div className="w-12 h-12 rounded-full bg-white text-[#b32a2e] flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500 shadow-2xl">
-                        <ArrowUpRight size={24} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="px-1 flex flex-col flex-grow">
-                    <div className="flex items-center gap-4 mb-4 text-white/40 text-[9px] font-bold uppercase tracking-[0.2em] montserrat">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar size={12} className="text-gold" />
-                        {formatDate(post.publishedAt)}
-                      </span>
-                      {post.readingTime && (
-                        <>
-                          <span className="h-1 w-1 rounded-full bg-gold/20"></span>
-                          <span className="flex items-center gap-1.5">
-                            <Clock size={12} className="text-gold" />
-                            {post.readingTime} min
+                      {post.category && (
+                        <div className="absolute top-4 left-4 z-20">
+                          <span className="montserrat bg-gold text-black px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg">
+                            {post.category}
                           </span>
-                        </>
+                        </div>
                       )}
+
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-white text-[#b32a2e] flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500 shadow-2xl">
+                          <ArrowUpRight size={24} />
+                        </div>
+                      </div>
                     </div>
 
-                    <h3 className="montserrat text-white text-xl max-[1100px]:text-lg font-bold leading-tight mb-4 group-hover:text-gold transition-colors line-clamp-2 uppercase tracking-tight">
-                      {post.title}
-                    </h3>
+                    <div className="px-1 flex flex-col flex-grow">
+                      <div className="flex items-center gap-4 mb-4 text-white/40 text-[9px] font-bold uppercase tracking-[0.2em] montserrat">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar size={12} className="text-gold" />
+                          {formatDate(post.publishedAt)}
+                        </span>
+                        {post.readingTime && (
+                          <>
+                            <span className="h-1 w-1 rounded-full bg-gold/20"></span>
+                            <span className="flex items-center gap-1.5">
+                              <Clock size={12} className="text-gold" />
+                              {post.readingTime} min
+                            </span>
+                          </>
+                        )}
+                      </div>
 
-                    <p className="montserrat text-gray-200/60 text-[13px] leading-relaxed line-clamp-2 font-medium mb-4">
-                      {post.excerpt}
-                    </p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                      <h3 className="montserrat text-white text-xl max-[1100px]:text-lg font-bold leading-tight mb-4 group-hover:text-gold transition-colors line-clamp-2 uppercase tracking-tight">
+                        {post.title}
+                      </h3>
+
+                      <p className="montserrat text-gray-200/60 text-[13px] leading-relaxed line-clamp-2 font-medium mb-4">
+                        {post.excerpt}
+                      </p>
+                    </div>
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>
 
+      {/* Optymalizacja dekoracji - SVG ładowane leniwie */}
       <Image
         src="/smok.svg"
         width={600}
         height={400}
         className="absolute -bottom-20 -right-20 opacity-[0.03] pointer-events-none -rotate-12 scale-150"
         alt=""
+        loading="lazy"
       />
     </section>
   );

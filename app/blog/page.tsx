@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getAllPosts } from "@/app/lib/api";
 import { BlogRecentGrid } from "@/app/components/sections/BlogRecentGrid";
 import { format } from "date-fns";

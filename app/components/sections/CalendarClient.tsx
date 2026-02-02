@@ -39,8 +39,6 @@ export default function CalendarClient({
   filterData,
   availableRegions,
 }: CalendarClientProps) {
-  console.log(trips);
-
   // Reszta logiki stanu bez zmian...
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRegion, setSelectedRegion] = useState("Wszystkie regiony");

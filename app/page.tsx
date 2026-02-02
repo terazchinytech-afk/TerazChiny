@@ -71,7 +71,6 @@ export default async function Home() {
       </main>
     );
   }
-  console.log(sanityData.testimonialsSection);
 
   return (
     <main className="min-h-screen flex flex-col bg-brand-white">

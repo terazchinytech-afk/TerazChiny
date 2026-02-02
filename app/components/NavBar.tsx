@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Strona Główna", href: "/" },
@@ -53,28 +54,24 @@ export const NavBar = ({ className }: { className?: string }) => {
   const [isSticky, setIsSticky] = useState(false);
 
   const pathname = usePathname();
-  const router = useRouter();
   const isHomePage = pathname === "/";
 
-  const toggleMenu = () => {
-    setOpen((prev) => !prev);
-  };
+  const toggleMenu = () => setOpen((prev) => !prev);
 
-  // 1. OBSŁUGA SCROLLA PO WEJŚCIU NA STRONĘ Z HASHEM (np. z /blog)
+  // Optymalizacja scrolla dla hash-linków (Lepsze UX)
   useEffect(() => {
-    if (isHomePage && window.location.hash) {
+    if (isHomePage && typeof window !== "undefined" && window.location.hash) {
       const id = window.location.hash.replace("#", "");
       const element = document.getElementById(id);
       if (element) {
-        // Małe opóźnienie, aby Next.js zdążył wyrenderować sekcję
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+        }, 150);
+        return () => clearTimeout(timeout);
       }
     }
   }, [isHomePage]);
 
-  // 2. FUNKCJA OBSŁUGUJĄCA KLIKNIĘCIE (Dla płynnego scrolla na tej samej stronie)
   const handleScroll = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string,
@@ -86,18 +83,13 @@ export const NavBar = ({ className }: { className?: string }) => {
       if (element && isHomePage) {
         e.preventDefault();
         element.scrollIntoView({ behavior: "smooth" });
-        if (open) toggleMenu();
+        if (open) setOpen(false);
       }
-      // Jeśli nie jesteśmy na Home, Link zadziała naturalnie i useEffect powyżej obsłuży scroll po zmianie route
     }
   };
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = open ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -105,23 +97,30 @@ export const NavBar = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     const handleScrollEvent = () => {
-      if (window.scrollY >= 100) {
+      // Optymalizacja progu sticky (dodanie tolerancji)
+      const currentScrollY = window.scrollY;
+      if (currentScrollY >= 100 && !isSticky) {
         setIsSticky(true);
-      } else {
+      } else if (currentScrollY < 100 && isSticky) {
         setIsSticky(false);
       }
     };
 
-    window.addEventListener("scroll", handleScrollEvent);
+    window.addEventListener("scroll", handleScrollEvent, { passive: true });
     return () => window.removeEventListener("scroll", handleScrollEvent);
-  }, []);
+  }, [isSticky]);
 
-  const navBackground = isSticky ? "#b32a2ecc" : "transparent";
+  // Memoizacja tła dla uniknięcia re-renderów warstwy tła
+  const navBackground = useMemo(
+    () => (isSticky ? "#b32a2ecc" : "transparent"),
+    [isSticky],
+  );
 
   return (
     <>
+      {/* Gradient tła (tylko na podstronach) */}
       {!isHomePage && !isSticky && (
-        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#b32a2e] to-transparent z-[90] pointer-events-none transition-opacity duration-300" />
+        <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#b32a2e] to-transparent z-[90] pointer-events-none" />
       )}
 
       <motion.nav
@@ -134,22 +133,25 @@ export const NavBar = ({ className }: { className?: string }) => {
           borderBottomLeftRadius: isSticky ? "19px" : "0px",
           borderBottomRightRadius: isSticky ? "19px" : "0px",
         }}
-        transition={{ duration: 0.3 }}
-        className={`z-[100] transition-all duration-300 ${
+        initial={false}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`z-[100] transition-shadow duration-300 ${
           isSticky
-            ? "fixed top-0 left-0 w-full shadow-xl"
+            ? "fixed top-0 left-0 w-full shadow-2xl shadow-black/10"
             : "absolute top-0 left-0 w-full"
         } ${className}`}
+        style={{ willChange: "transform, background-color" }} // Optymalizacja GPU
       >
         <div className="container mx-auto px-4 md:px-12 flex flex-row justify-between items-center relative z-[101]">
           <div className="relative z-50">
-            <Link href="/">
+            <Link href="/" className="block">
               <Image
-                src={"/TerazChinyLogo.svg"}
-                alt="Logo"
+                src="/TerazChinyLogo.svg"
+                alt="Logo Teraz Chiny"
                 height={40}
                 width={168}
                 className="object-contain cursor-pointer"
+                priority // Kluczowe dla LCP i CLS
               />
             </Link>
           </div>
@@ -160,7 +162,7 @@ export const NavBar = ({ className }: { className?: string }) => {
                 <Link
                   href={link.href}
                   onClick={(e) => handleScroll(e, link.href)}
-                  className="inline-block text-xs text-[#efd075] tracking-[0.3px] font-montserrat font-medium transition-all duration-300 ease-out hover:text-white hover:-translate-y-1 hover:drop-shadow-[0_10px_8px_rgba(250,247,242,0.3)]"
+                  className="inline-block text-xs text-[#efd075]  tracking-[0.5px] font-montserrat font-bold transition-all duration-300 ease-out hover:text-white hover:-translate-y-0.5"
                 >
                   {link.label}
                 </Link>
@@ -171,9 +173,10 @@ export const NavBar = ({ className }: { className?: string }) => {
           <div className="hidden max-[775px]:block relative z-50">
             <button
               onClick={toggleMenu}
-              className="text-white p-2 hover:bg-white/10 rounded-full transition-colors"
+              className="text-white p-2 hover:bg-white/10 rounded-full transition-colors active:scale-90"
+              aria-label="Menu"
             >
-              {open ? <X size={34} /> : <Menu size={34} />}
+              {open ? <X size={32} /> : <Menu size={32} />}
             </button>
           </div>
         </div>
@@ -185,14 +188,15 @@ export const NavBar = ({ className }: { className?: string }) => {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="fixed left-0 top-0 w-full h-screen bg-[#b32a2e]/95 backdrop-blur-md origin-top flex flex-col justify-center items-center z-40"
+              className="fixed left-0 top-0 w-full h-screen bg-[#b32a2e]/98 backdrop-blur-xl origin-top flex flex-col justify-center items-center z-40"
+              style={{ willChange: "transform" }}
             >
               <motion.div
                 variants={containerVars}
                 initial="initial"
                 animate="open"
                 exit="initial"
-                className="flex flex-col gap-8 text-center font-montserrat"
+                className="flex flex-col gap-10 text-center font-montserrat"
               >
                 {navLinks.map((link) => (
                   <div key={link.href} className="overflow-hidden">
@@ -201,9 +205,9 @@ export const NavBar = ({ className }: { className?: string }) => {
                         href={link.href}
                         onClick={(e) => {
                           handleScroll(e, link.href);
-                          if (!link.href.includes("#")) toggleMenu();
+                          if (!link.href.includes("#")) setOpen(false);
                         }}
-                        className="text-3xl text-white font-bold uppercase tracking-widest hover:text-[#efd075] transition-colors"
+                        className="text-3xl text-white font-black uppercase tracking-[0.2em] hover:text-[#efd075] transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -215,7 +219,7 @@ export const NavBar = ({ className }: { className?: string }) => {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { delay: 0.8 } }}
-                className="absolute bottom-10 text-white/30 text-xs tracking-widest uppercase"
+                className="absolute bottom-12 text-white/20 text-[10px] font-bold tracking-[0.3em] uppercase"
               >
                 Teraz Chiny © {new Date().getFullYear()}
               </motion.div>

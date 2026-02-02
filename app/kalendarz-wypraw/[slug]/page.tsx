@@ -134,7 +134,6 @@ export async function generateMetadata({
 export default async function TripDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const rawTrip = await getTripBySlug(slug);
-  console.log(rawTrip);
 
   if (!rawTrip) notFound();
 

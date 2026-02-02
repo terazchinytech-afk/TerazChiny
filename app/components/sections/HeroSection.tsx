@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SliderProgress } from "../SliderProgress";
 import { NavBar } from "../NavBar";
 
-// --- 1. KONFIGURACJA WIZUALNA + DANE STARTOWE (FALLBACK) ---
+// --- 1. KONFIGURACJA WIZUALNA + DANE STARTOWE (ZACHOWANA CO DO PIXELA) ---
 const STATIC_LAYOUT = [
   {
     id: 0,
@@ -20,10 +20,7 @@ const STATIC_LAYOUT = [
     outlineImage: "/murChińskiOutline.png",
     position:
       "left-[100px] top-[35px] min-[2050px]:left-[120px] max-[650px]:!h-[150px] max-[650px]:!w-[auto] max-[650px]:top-[90px] max-[650px]:left-[40px] max-[450px]:!h-[130px] max-[450px]:!w-[auto] max-[450px]:top-[90px] max-[450px]:left-[40px] max-[420px]:!h-[110px] max-[420px]:!w-[auto] max-[420px]:top-[120px] max-[420px]:left-[-50px]",
-    imageSizes: {
-      height: 250,
-      width: 250,
-    },
+    imageSizes: { height: 250, width: 250 },
   },
   {
     id: 1,
@@ -33,10 +30,7 @@ const STATIC_LAYOUT = [
     outlineImage: "/zakazaneMiastoOutline.png",
     position:
       "left-[100px] top-[-135px] max-[720px]:!h-[230px] max-[720px]:!w-[auto] max-[720px]:top-[-180px] max-[720px]:left-[40px] max-[540px]:!h-[230px] max-[540px]:!w-[auto] max-[540px]:top-[10px] max-[540px]:left-[-170px]",
-    imageSizes: {
-      height: 350,
-      width: 350,
-    },
+    imageSizes: { height: 350, width: 350 },
   },
   {
     id: 2,
@@ -46,10 +40,7 @@ const STATIC_LAYOUT = [
     outlineImage: "/armiaOutline.png",
     position:
       "left-[120px] top-[95px] rounded-2xl max-[650px]:top-[95px] max-[650px]:left-[10px] max-[420px]:top-[125px] max-[420px]:left-[-150px]",
-    imageSizes: {
-      height: 200,
-      width: 205,
-    },
+    imageSizes: { height: 200, width: 205 },
   },
   {
     id: 3,
@@ -59,10 +50,7 @@ const STATIC_LAYOUT = [
     outlineImage: "/palacLetniOutline.png",
     position:
       "left-[130px] top-[-115px] max-[770px]:top-[125px] max-[770px]:left-[0px] max-[420px]:top-[125px] max-[420px]:left-[-100px] max-[420px]:!h-[110px] max-[420px]:w-auto",
-    imageSizes: {
-      height: 250,
-      width: 250,
-    },
+    imageSizes: { height: 250, width: 250 },
   },
   {
     id: 4,
@@ -72,14 +60,11 @@ const STATIC_LAYOUT = [
     outlineImage: "/góryZahangjiajieOutline.png",
     position:
       "left-[150px] top-[-120px] max-[1140px]:h-[130px] max-[1140px]:w-auto max-[1140px]:top-[100px] max-[1140px]:left-[-30px] max-[900px]:left-[-100px] max-[420px]:left-[-200px]",
-    imageSizes: {
-      height: 350,
-      width: 250,
-    },
+    imageSizes: { height: 350, width: 250 },
   },
 ];
 
-// --- KONFIGURACJA POZYCJI DROGI ---
+// --- KONFIGURACJA POZYCJI DROGI (NIETKNIĘTA) ---
 const ROAD_CONFIG = [
   {
     maxWidth: 420,
@@ -171,7 +156,6 @@ const ANIMATION_CONFIG = [
   { arrowDelay: 1.5 },
 ];
 
-// --- TYPY DANYCH Z SANITY ---
 interface SanitySlide {
   title: string;
   description: string;
@@ -194,17 +178,18 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
   const [showInfoOverlay, setShowInfoOverlay] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  // --- MERGE DANYCH (KLUCZOWA ZMIANA) ---
-  const staticSlide = STATIC_LAYOUT[currentIndex];
-  const sanitySlide = data?.slides?.[currentIndex];
-
-  const currentSlide = {
-    ...staticSlide,
-    subtitle: sanitySlide?.title || staticSlide.subtitle,
-    desc: sanitySlide?.description || staticSlide.desc,
-    img: sanitySlide?.img || staticSlide.img,
-    outlineImage: sanitySlide?.outlineImage || staticSlide.outlineImage,
-  };
+  // --- MERGE DANYCH (ZACHOWANA LOGIKA) ---
+  const currentSlide = useMemo(() => {
+    const staticSlide = STATIC_LAYOUT[currentIndex];
+    const sanitySlide = data?.slides?.[currentIndex];
+    return {
+      ...staticSlide,
+      subtitle: sanitySlide?.title || staticSlide.subtitle,
+      desc: sanitySlide?.description || staticSlide.desc,
+      img: sanitySlide?.img || staticSlide.img,
+      outlineImage: sanitySlide?.outlineImage || staticSlide.outlineImage,
+    };
+  }, [currentIndex, data]);
 
   const mainTitle = data?.mainTitle || "CHINY";
   const mainDescription = data?.mainDescription || "Odkryj Państwo Środka...";
@@ -233,11 +218,13 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
 
   const changeSlide = (direction: "next" | "prev") => {
     const totalSlides = STATIC_LAYOUT.length;
-    if (direction === "next") {
-      setCurrentIndex((prev) => (prev + 1) % totalSlides);
-    } else {
-      setCurrentIndex((prev) => (prev === 0 ? totalSlides - 1 : prev - 1));
-    }
+    setCurrentIndex((prev) =>
+      direction === "next"
+        ? (prev + 1) % totalSlides
+        : prev === 0
+          ? totalSlides - 1
+          : prev - 1,
+    );
   };
 
   return (
@@ -264,7 +251,6 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                 <span className="font-montserrat text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:-translate-x-2">
                   {ctaLabel}
                 </span>
-
                 <div className="flex w-0 opacity-0 -translate-x-4 transition-all duration-300 ease-out group-hover:w-5 group-hover:translate-x-2 group-hover:opacity-100">
                   <ArrowRight size={16} className="shrink-0" />
                 </div>
@@ -298,7 +284,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                       className="object-cover"
                       alt={currentSlide.subtitle}
                       sizes="235px"
-                      priority
+                      priority={currentIndex === 0}
                     />
                     {!showInfoOverlay && (
                       <button
@@ -348,9 +334,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                   delay: ANIMATION_CONFIG[currentIndex]?.arrowDelay || 1.2,
                   duration: 0.5,
                 }}
-                className={`relative bottom-[40px] -right-[190px] ${
-                  currentIndex === 3 && "max-[420px]:-right-[200px]"
-                }`}
+                className={`relative bottom-[40px] -right-[190px] ${currentIndex === 3 && "max-[420px]:-right-[200px]"}`}
               >
                 <Image
                   src="/heroArrow.svg"
@@ -402,7 +386,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
         </div>
       </div>
 
-      {/* --- WARSTWA TŁA --- */}
+      {/* --- WARSTWA TŁA (OPTYMALIZACJA LCP - LAYOUT NIETKNIĘTY) --- */}
       <div className="absolute top-0 -z-10 grid h-208.75 w-screen grid-cols-[5fr_4fr] overflow-hidden max-[900px]:flex max-[900px]:flex-col max-[900px]:h-auto">
         <div className="relative z-20 h-full w-full bg-brand-red max-[900px]:h-157.5">
           <Image
@@ -411,6 +395,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
             className="scale-[1.01] rounded-br-[69px] object-cover"
             alt="Background"
             priority
+            fetchPriority="high"
           />
         </div>
 
