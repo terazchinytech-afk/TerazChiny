@@ -16,8 +16,8 @@ const STATIC_LAYOUT = [
     id: 0,
     subtitle: "Mur Chiński",
     desc: "Jeden z siedmiu nowych cudów świata. Symbol potęgi i wytrwałości, wijący się przez tysiące kilometrów górskich szczytów.",
-    img: "/mur-chinski.png",
-    outlineImage: "/murChińskiOutline.png",
+    img: "/webp/mur-chinski.webp",
+    outlineImage: "/webp/murChińskiOutline.webp",
     position:
       "left-[100px] top-[35px] min-[2050px]:left-[120px] max-[650px]:!h-[150px] max-[650px]:!w-[auto] max-[650px]:top-[90px] max-[650px]:left-[40px] max-[450px]:!h-[130px] max-[450px]:!w-[auto] max-[450px]:top-[90px] max-[450px]:left-[40px] max-[420px]:!h-[110px] max-[420px]:!w-[auto] max-[420px]:top-[120px] max-[420px]:left-[-50px]",
     imageSizes: { height: 250, width: 250 },
@@ -26,8 +26,8 @@ const STATIC_LAYOUT = [
     id: 1,
     subtitle: "Zakazane Miasto",
     desc: "Największy kompleks pałacowy świata. Przez 500 lat dom cesarzy, niedostępny dla zwykłych śmiertelników, pełen tajemnic.",
-    img: "/zakazane-miasto.png",
-    outlineImage: "/zakazaneMiastoOutline.png",
+    img: "/webp/zakazane-miasto.webp",
+    outlineImage: "/webp/zakazaneMiastoOutline.webp",
     position:
       "left-[100px] top-[-135px] max-[720px]:!h-[230px] max-[720px]:!w-[auto] max-[720px]:top-[-180px] max-[720px]:left-[40px] max-[540px]:!h-[230px] max-[540px]:!w-[auto] max-[540px]:top-[10px] max-[540px]:left-[-170px]",
     imageSizes: { height: 350, width: 350 },
@@ -36,8 +36,8 @@ const STATIC_LAYOUT = [
     id: 2,
     subtitle: "Armia Terakotowa",
     desc: "Tysiące naturalnej wielkości figur żołnierzy, koni i rydwanów, które miały strzec Pierwszego Cesarza w życiu pozagrobowym.",
-    img: "/armia-terakotowa.png",
-    outlineImage: "/armiaOutline.png",
+    img: "/webp/armia-terakotowa.webp",
+    outlineImage: "/webp/armiaOutline.webp",
     position:
       "left-[120px] top-[95px] rounded-2xl max-[650px]:top-[95px] max-[650px]:left-[10px] max-[420px]:top-[125px] max-[420px]:left-[-150px]",
     imageSizes: { height: 200, width: 205 },
@@ -46,8 +46,8 @@ const STATIC_LAYOUT = [
     id: 3,
     subtitle: "Pałac Letni",
     desc: "Arcydzieło chińskiego projektowania ogrodów. Miejsce, gdzie cesarze uciekali przed upałem Pekinu, by odpocząć nad jeziorem Kunming.",
-    img: "/palac-letni.png",
-    outlineImage: "/palacLetniOutline.png",
+    img: "/webp/palac-letni.webp",
+    outlineImage: "/webp/palacLetniOutline.webp",
     position:
       "left-[130px] top-[-115px] max-[770px]:top-[125px] max-[770px]:left-[0px] max-[420px]:top-[125px] max-[420px]:left-[-100px] max-[420px]:!h-[110px] max-[420px]:w-auto",
     imageSizes: { height: 250, width: 250 },
@@ -56,8 +56,8 @@ const STATIC_LAYOUT = [
     id: 4,
     subtitle: "Góry Zhangjiajie",
     desc: "Mistyczne filary z piaskowca tonące w chmurach. To właśnie ten krajobraz był inspiracją do stworzenia lewitujących gór w filmie Avatar.",
-    img: "/zhangjiajie.png",
-    outlineImage: "/góryZahangjiajieOutline.png",
+    img: "/webp/zhangjiajie.webp",
+    outlineImage: "/webp/góryZahangjiajieOutline.webp",
     position:
       "left-[150px] top-[-120px] max-[1140px]:h-[130px] max-[1140px]:w-auto max-[1140px]:top-[100px] max-[1140px]:left-[-30px] max-[900px]:left-[-100px] max-[420px]:left-[-200px]",
     imageSizes: { height: 350, width: 250 },
@@ -390,7 +390,7 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
       <div className="absolute top-0 -z-10 grid h-208.75 w-screen grid-cols-[5fr_4fr] overflow-hidden max-[900px]:flex max-[900px]:flex-col max-[900px]:h-auto">
         <div className="relative z-20 h-full w-full bg-brand-red max-[900px]:h-157.5">
           <Image
-            src="/heroBackground.png"
+            src="/webp/heroBackground.webp"
             fill
             className="scale-[1.01] rounded-br-[69px] object-cover"
             alt="Background"

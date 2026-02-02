@@ -55,7 +55,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
 
   // Optymalizacja zdjęcia głównego
   const optimizedHero = useMemo(
-    () => getOptimizedImageUrl(heroImage || "/contactImage.png", 1600),
+    () => getOptimizedImageUrl(heroImage || "/webp/contactImage.webp", 1600),
     [heroImage],
   );
 
