@@ -115,6 +115,7 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
       ),
     [header.title.fullText, header.title.highlight],
   );
+  console.log(data);
 
   return (
     <section className="w-full bg-gray-50 landing-spacing py-32">
@@ -195,6 +196,7 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                 const StatusIcon = statusInfo.icon;
                 const isSoldOut = trip.status?.replace("-", "_") === "sold_out";
                 const dateObj = formatDate(trip.date);
+                console.log(trip.slug.current);
 
                 return (
                   <motion.div
@@ -205,7 +207,11 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <Link
-                      href={isSoldOut ? "#" : `/wyprawy/${trip.slug?.current}`}
+                      href={
+                        isSoldOut
+                          ? "#"
+                          : `/kalendarz-wypraw/${trip.slug.current}`
+                      }
                       aria-disabled={isSoldOut}
                       className={`block relative transition-all duration-300 ${isSoldOut ? "opacity-60 grayscale cursor-not-allowed pointer-events-none" : "group"}`}
                     >
