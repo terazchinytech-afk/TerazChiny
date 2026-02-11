@@ -90,14 +90,14 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
 
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col gap-16">
         {/* --- NAGŁÓWEK --- */}
-        <div className="flex flex-row max-[900px]:flex-col justify-between items-end max-[900px]:items-start mb-16 gap-8">
+        <div className="flex flex-row  justify-between items-end max-[900px]:items-start mb-16 gap-8  max-[720px]:text-center  max-[720px]:self-center">
           <div>
             {header.subtitle && (
               <span className="montserrat text-gold text-xs font-black uppercase tracking-[0.4em] mb-4 block">
                 {header.subtitle}
               </span>
             )}
-            <h2 className="text-3xl -ml-2 max-[812px]:text-4xl lg:text-5xl font-montserrat font-black text-white leading-tight max-[812px]:text-center">
+            <h2 className="text-3xl  max-[812px]:text-4xl lg:text-5xl font-montserrat font-black text-white leading-tight max-[812px]:text-center">
               {titleParts.map((part, i) =>
                 part.toLowerCase() === header.highlight?.toLowerCase() ? (
                   <span key={i} className="text-gold">
@@ -110,10 +110,10 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
             </h2>
           </div>
 
-          <Link href={"/blog"} className="w-fit block -mt-4">
+          <Link href={"/blog"} className="w-fit block -mt-4 max-[720px]:hidden">
             <motion.div
               whileTap={{ scale: 0.95 }}
-              className="group mt-6 flex items-center justify-center rounded-lg bg-[#efd075] px-10 py-3 font-bold text-[#b32a2e] shadow-lg transition-all duration-300"
+              className="group mt-4 flex items-center justify-center rounded-lg bg-[#efd075] px-10 py-3 font-bold text-[#b32a2e] shadow-lg transition-all duration-300"
             >
               <span className="font-montserrat text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:-translate-x-2">
                 {ctaText || "Zobacz wszystkie"}
@@ -223,6 +223,23 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
             })}
           </div>
         )}
+        <Link
+          href={"/blog"}
+          className="w-fit  -mt-4 hidden max-[720px]:block self-center mt-4"
+        >
+          <motion.div
+            whileTap={{ scale: 0.95 }}
+            className="group mt-4 flex items-center justify-center rounded-lg bg-[#efd075] px-10 py-3 font-bold text-[#b32a2e] shadow-lg transition-all duration-300"
+          >
+            <span className="font-montserrat text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:-translate-x-2">
+              {ctaText || "Zobacz wszystkie"}
+            </span>
+
+            <div className="flex w-0 opacity-0 -translate-x-4 transition-all duration-300 ease-out group-hover:w-5 group-hover:translate-x-2 group-hover:opacity-100">
+              <ArrowRight size={16} className="shrink-0" />
+            </div>
+          </motion.div>
+        </Link>
       </div>
 
       {/* Optymalizacja dekoracji - SVG ładowane leniwie */}

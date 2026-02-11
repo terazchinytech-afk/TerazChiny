@@ -79,7 +79,7 @@ export const TripFAQ = ({ faqData }: TripFAQProps) => {
         </div>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 md:p-12 shadow-sm">
+      <div className="bg-white rounded-[2.5rem] border border-gray-100 p-8 md:p-12 shadow-sm max-[500px]:px-4">
         <div className="flex flex-col">
           {faqData.map((item, index) => (
             <AccordionItem

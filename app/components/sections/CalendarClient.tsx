@@ -5,33 +5,30 @@ import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { TripFilter } from "../TripFilter";
-import { CalendarStrip } from "../CalendarStrip";
+import { CalendarStrip } from "./calendarSection/CalendarStrip";
 import { TripCard } from "../TripCard";
-
-export interface FormattedTrip {
-  id: string;
-  year: number;
-  month: string;
-  day: string;
-  dates: string;
-  duration: string;
-  title: string;
-  region: string;
-  description: string;
-  price: string;
-  spots: string;
-  image: string;
-  slug: string;
-}
+import {
+  FormattedTrip,
+  MONTHS_BASE,
+} from "./calendarSection/CalendarConstants";
 
 interface CalendarClientProps {
   trips: FormattedTrip[];
   heroData?: any;
   filterData?: any;
-  availableRegions: string[]; // <-- Odbieramy listę regionów
+  availableRegions: string[];
 }
 
 const ITEMS_PER_PAGE = 4;
+
+// MAPOWANIE SEZONÓW (Musi być zgodne z ID w CalendarVariant3)
+const SEASON_MAPPING: Record<string, string[]> = {
+  early_winter: ["STY", "LUT"],
+  spring: ["MAR", "KWI", "MAJ"],
+  summer: ["CZE", "LIP", "SIE"],
+  autumn: ["WRZ", "PAŹ", "LIS"],
+  late_winter: ["GRU"],
+};
 
 export default function CalendarClient({
   trips,
@@ -39,24 +36,59 @@ export default function CalendarClient({
   filterData,
   availableRegions,
 }: CalendarClientProps) {
-  // Reszta logiki stanu bez zmian...
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRegion, setSelectedRegion] = useState("Wszystkie regiony");
+
   const defaultYear =
     trips.length > 0 ? trips[0].year : new Date().getFullYear();
 
   const [selectedYear, setSelectedYear] = useState(defaultYear);
   const [selectedMonth, setSelectedMonth] = useState("ALL");
 
+  // --- LOGIKA FILTROWANIA ---
   const filteredTrips = useMemo(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     let filtered = [...trips];
+
+    // 1. Filtr Regionu
     if (selectedRegion !== "Wszystkie regiony") {
       filtered = filtered.filter((trip) => trip.region === selectedRegion);
     }
-    filtered = filtered.filter((trip) => trip.year === selectedYear);
-    if (selectedMonth !== "ALL") {
-      filtered = filtered.filter((trip) => trip.month === selectedMonth);
+
+    // 2. Logika Roku i "Wszystkie Terminy"
+    if (selectedYear === 0) {
+      // Jeśli wybrano "Wszystkie", pokazujemy przyszłe wyprawy z wszystkich lat
+      filtered = filtered.filter((trip) => {
+        const monthIndex = MONTHS_BASE.findIndex((m) => m.value === trip.month);
+        // Bezpieczne tworzenie daty (dzień 1, jeśli brak)
+        const tripDate = new Date(
+          trip.year,
+          monthIndex !== -1 ? monthIndex : 0,
+          parseInt(trip.day) || 1,
+        );
+        return tripDate >= today;
+      });
+    } else {
+      // Standardowe filtrowanie po roku
+      filtered = filtered.filter((trip) => trip.year === selectedYear);
+
+      // 3. Filtr Miesiąca LUB Sezonu
+      if (selectedMonth !== "ALL") {
+        if (selectedMonth in SEASON_MAPPING) {
+          // A. JEST TO SEZON (np. "summer") -> Sprawdź czy miesiąc wyprawy jest w liście
+          const allowedMonths = SEASON_MAPPING[selectedMonth];
+          filtered = filtered.filter((trip) =>
+            allowedMonths.includes(trip.month),
+          );
+        } else {
+          // B. JEST TO ZWYKŁY MIESIĄC (np. "MAJ")
+          filtered = filtered.filter((trip) => trip.month === selectedMonth);
+        }
+      }
     }
+
     return filtered;
   }, [selectedRegion, selectedMonth, selectedYear, trips]);
 
@@ -84,8 +116,30 @@ export default function CalendarClient({
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Helper do wyświetlania nazwy filtra w nagłówku listy
+  const getFilterLabel = () => {
+    if (selectedYear === 0) return "Nadchodzące wyprawy";
+    if (selectedMonth === "ALL") return `Rok ${selectedYear}`;
+
+    // Tłumaczenie labeli sezonów dla nagłówka
+    const seasonLabels: Record<string, string> = {
+      early_winter: "Zima (Styczeń-Luty)",
+      spring: "Wiosna",
+      summer: "Lato",
+      autumn: "Jesień",
+      late_winter: "Grudzień",
+    };
+
+    if (selectedMonth in seasonLabels) {
+      return `${seasonLabels[selectedMonth]} ${selectedYear}`;
+    }
+
+    return `${selectedMonth} ${selectedYear}`;
+  };
+
   return (
-    <main className="min-h-screen font-montserrat bg-gray-50">
+    <main className="min-h-screen font-montserrat bg-white">
+      {/* ... Hero Section ... */}
       <div className="relative w-full min-h-[650px] h-[85vh] max-[1024px]:h-auto max-[1024px]:pb-12 bg-white max-[1024px]:mb-44">
         <div className="relative h-full w-full rounded-b-[60px] max-[768px]:rounded-b-[40px] shadow-xl z-10">
           <Image
@@ -119,14 +173,13 @@ export default function CalendarClient({
               </motion.div>
             </div>
 
-            {/* Przekazujemy regiony do filtra */}
             <div className="w-1/2 max-[1024px]:w-full flex justify-end max-[1024px]:justify-center z-30 max-[1024px]:relative max-[1024px]:top-[145px]">
               <TripFilter
                 selectedRegion={selectedRegion}
                 onRegionChange={handleFilterChange}
                 onSearchClick={scrollToTrips}
                 labels={filterData}
-                availableRegions={availableRegions} // <-- TU PRZEKAZUJEMY LISTĘ
+                availableRegions={availableRegions}
               />
             </div>
           </div>
@@ -144,6 +197,7 @@ export default function CalendarClient({
           setSelectedMonth(month);
           setCurrentPage(1);
         }}
+        events={trips}
       />
 
       <section
@@ -153,9 +207,7 @@ export default function CalendarClient({
         <div className="flex justify-between items-end max-[768px]:flex-col max-[768px]:items-center mb-12 border-b border-gray-200 pb-6 gap-4">
           <div className="max-[768px]:flex max-[768px]:items-center flex-col">
             <span className="text-xs font-bold text-red-700 uppercase tracking-widest bg-red-50 px-3 py-1 rounded-full border border-red-100 ">
-              {selectedMonth === "ALL"
-                ? `Rok ${selectedYear}`
-                : `${selectedMonth} ${selectedYear}`}
+              {getFilterLabel()}
             </span>
             <h2 className="text-4xl max-[768px]:text-3xl font-bold text-gray-900 mt-4">
               Dostępne terminy
@@ -195,7 +247,11 @@ export default function CalendarClient({
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${currentPage === page ? "bg-brand-red text-white shadow-md scale-110" : "bg-white text-gray-700 border border-gray-200 hover:border-brand-red hover:text-brand-red"}`}
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
+                  currentPage === page
+                    ? "bg-brand-red text-white shadow-md scale-110"
+                    : "bg-white text-gray-700 border border-gray-200 hover:border-brand-red hover:text-brand-red"
+                }`}
               >
                 {page}
               </button>

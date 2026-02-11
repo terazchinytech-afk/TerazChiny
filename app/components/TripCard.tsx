@@ -77,7 +77,7 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
       className={`
-        group flex flex-col min-[1031px]:flex-row w-full bg-white rounded-3xl shadow-sm border border-gray-100 
+        group flex flex-col min-[1031px]:flex-row w-full bg-white min-[1024px]:min-h-[300px] rounded-3xl shadow-sm border border-gray-100 
         hover:shadow-xl transition-all duration-300 overflow-hidden
         ${isSoldOut ? "opacity-60 grayscale-[0.8] pointer-events-none" : ""}
       `}
@@ -138,10 +138,10 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
 
           <Link
             href={`/kalendarz-wypraw/${trip.slug}`}
-            className="max-[550px]:ml-4"
+            className="max-[550px]:ml-4 cursor-pointer"
           >
             {/* Przycisk zmienia się na mniejszy (tylko ikona lub krótki tekst) poniżej 550px */}
-            <button className="bg-[#b32a2e] text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
+            <button className="bg-[#b32a2e] cursor-pointer text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
               <span className="max-[380px]:hidden">Szczegóły</span>
               <ArrowRight
                 size={16}

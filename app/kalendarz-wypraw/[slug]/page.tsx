@@ -1,13 +1,16 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
+import { CheckCircle2 } from "lucide-react";
 
+// Importy Twoich komponentów
 import { TripHero } from "@/app/components/sections/TripHero";
 import { TripDetailsGrid } from "@/app/components/sections/TripDetailsGrid";
 import { TripBookingCard } from "@/app/components/sections/TripBookingCard";
 import { TripFAQ } from "@/app/components/sections/TripFaq";
-import { CheckCircle2 } from "lucide-react";
+
 import { getTripBySlug } from "@/app/lib/api";
+import { MobileBookingManager } from "@/app/components/sections/singleTrip/MobileBookingManager";
 
 interface PageProps {
   params: Promise<{
@@ -15,7 +18,7 @@ interface PageProps {
   }>;
 }
 
-// --- ZMODYFIKOWANA KONFIGURACJA Z CZERWONYMI AKCENTAMI ---
+// --- KONFIGURACJA PORTABLE TEXT (Style dla treści z Sanity) ---
 const portableTextComponents: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
@@ -54,7 +57,6 @@ const portableTextComponents: PortableTextComponents = {
         {children}
       </strong>
     ),
-    // Dodatkowo: jeśli w Sanity zaznaczysz link
     link: ({ value, children }) => (
       <a
         href={value?.href}
@@ -66,6 +68,7 @@ const portableTextComponents: PortableTextComponents = {
   },
 };
 
+// --- HELPER FORMATOWANIA DAT ---
 const formatDateDetails = (dateString: string, durationString: string) => {
   if (!dateString)
     return { year: new Date().getFullYear(), dates: "Termin wkrótce" };
@@ -81,6 +84,7 @@ const formatDateDetails = (dateString: string, durationString: string) => {
   return { year, dates: `${day} - ${endDay}.${endMonthString}` };
 };
 
+// --- METADATA (SEO) ---
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -89,7 +93,6 @@ export async function generateMetadata({
 
   if (!trip) return { title: "Wyprawa nie znaleziona" };
 
-  // Logika fallbacków:
   const title = trip.seoTitle || `${trip.title} | Teraz Chiny`;
   const description = trip.seoDescription || trip.shortDescription;
   const keywords = trip.seoKeywords || "";
@@ -123,7 +126,6 @@ export async function generateMetadata({
       description: description,
       images: shareImage ? [shareImage] : [],
     },
-    // Opcjonalnie roboty:
     robots: {
       index: true,
       follow: true,
@@ -131,6 +133,7 @@ export async function generateMetadata({
   };
 }
 
+// --- GŁÓWNY KOMPONENT STRONY ---
 export default async function TripDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const rawTrip = await getTripBySlug(slug);
@@ -147,14 +150,26 @@ export default async function TripDetailPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffffff] pb-20">
+    // pb-32 na mobile zapewnia miejsce dla wysuwanego paska rezerwacji
+    <div className="min-h-screen bg-[#ffffff] pb-32 lg:pb-20 relative">
       <TripHero trip={trip} />
 
-      <div className="max-w-7xl mx-auto px-6 mt-12">
-        <div className="flex flex-col min-[1031px]:flex-row gap-12 lg:flex-row">
+      <div className="max-w-7xl mx-auto px-6 mt-8 lg:mt-12">
+        <div className="flex flex-col min-[1031px]:flex-row gap-12 lg:flex-row relative">
+          {/* LEWA KOLUMNA (Treść) */}
           <div className="flex-1 min-w-0">
+            {/* 1. Mobile Manager: Wyświetla statyczną kartę Ceny + Dostępności 
+                   A gdy zniknie z ekranu -> pokazuje Sticky Bar na dole */}
+            <MobileBookingManager
+              price={trip.price}
+              bookingUrl={trip.bookingUrl}
+              tripTitle={trip.title}
+            />
+
+            {/* 2. Grid szczegółów (Data, Czas, Grupa - teraz jako estetyczne kafelki) */}
             <TripDetailsGrid trip={trip} />
 
+            {/* 3. Główna treść artykułu */}
             <article className="max-w-none mt-12">
               <div className="flex items-center gap-3 mb-8">
                 <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">
@@ -177,7 +192,7 @@ export default async function TripDetailPage({ params }: PageProps) {
               </div>
             </article>
 
-            {/* ATUTY */}
+            {/* 4. Sekcja Atutów (Highlights) */}
             {trip.highlights && trip.highlights.length > 0 && (
               <div className="mt-16 grid md:grid-cols-2 gap-4">
                 {trip.highlights.map((item: string) => (
@@ -197,17 +212,18 @@ export default async function TripDetailPage({ params }: PageProps) {
               </div>
             )}
 
-            {/* FAQ */}
+            {/* 5. Sekcja FAQ */}
             {trip.faq && trip.faq.length > 0 && <TripFAQ faqData={trip.faq} />}
           </div>
 
-          <div className="relative">
+          {/* PRAWA KOLUMNA (Sidebar - tylko Desktop) */}
+          <div className="relative hidden lg:block">
             <div className="sticky top-24">
               <TripBookingCard
                 price={trip.price}
-                bookingUrl={trip.bookingUrl} // To pole z Sanity
-                tripTitle={trip.title} // Nazwa wyprawy do parametrów
-                tripSlug={trip.slug} // Slug wyprawy do parametrów
+                bookingUrl={trip.bookingUrl}
+                tripTitle={trip.title}
+                tripSlug={trip.slug}
               />
             </div>
           </div>

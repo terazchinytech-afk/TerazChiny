@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from "next";
 import { getAllTrips, getCalendarPageData } from "../lib/api";
-import CalendarClient, {
-  FormattedTrip,
-} from "../components/sections/CalendarClient";
+import CalendarClient from "../components/sections/CalendarClient";
 
 // --- FORMATOWANIE DATY (BEZ ZMIAN) ---
 const formatDateDetails = (dateString: string, durationString: string) => {
@@ -64,13 +62,14 @@ export default async function CalendarPage() {
     getCalendarPageData(),
     getAllTrips(),
   ]);
+  console.log(rawTrips);
 
   // 1. Formatowanie wycieczek
-  const formattedTrips: FormattedTrip[] = rawTrips.map((trip: any) => {
+  const formattedTrips: any = rawTrips.map((trip: any) => {
     const dateDetails = formatDateDetails(trip.date, trip.duration);
     return {
       id: trip.id,
-      slug: trip.slug?.current,
+      slug: trip.slug,
       year: dateDetails.year,
       month: dateDetails.month,
       day: dateDetails.day,
@@ -78,7 +77,7 @@ export default async function CalendarPage() {
       duration: trip.duration,
       title: trip.title,
       region: trip.location || "Chiny",
-      description: trip.description || "",
+      description: trip.shortDescription || "",
       price: trip.price,
       spots: trip.status || "available",
       image: trip.mainImage || "/placeholder.jpg",
@@ -88,7 +87,7 @@ export default async function CalendarPage() {
   // 2. AUTOMATYCZNE WYCIĄGANIE REGIONÓW
   // Tworzymy zbiór (Set) unikalnych lokalizacji z pobranych wycieczek
   const uniqueRegions = Array.from(
-    new Set(formattedTrips.map((trip) => trip.region)),
+    new Set(formattedTrips.map((trip: any) => trip.region)),
   )
     .filter(Boolean)
     .sort(); // Usuwamy puste i sortujemy alfabetycznie
@@ -99,7 +98,7 @@ export default async function CalendarPage() {
       trips={formattedTrips}
       heroData={pageData?.heroSection}
       filterData={pageData?.filterSection}
-      availableRegions={uniqueRegions} // <-- NOWY PROP
+      availableRegions={uniqueRegions as any} // <-- NOWY PROP
     />
   );
 }

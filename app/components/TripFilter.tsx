@@ -167,14 +167,6 @@ export const TripFilter = ({
           options={regionOptions}
           onChange={handleRegionSelect}
         />
-
-        <CustomSelect
-          label={labels?.dateLabel || "Kiedy?"}
-          icon={<Calendar size={18} />}
-          value={date}
-          options={dateOptions}
-          onChange={setDate}
-        />
       </div>
 
       <button

@@ -158,7 +158,7 @@ export async function getAllTrips() {
       price,
       location,
       status, 
-      description,
+      shortDescription,
       "mainImage": mainImage.asset->url
     }
   `;

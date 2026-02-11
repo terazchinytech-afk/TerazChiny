@@ -9,6 +9,7 @@ import { FaqSection } from "./components/sections/FaqSection";
 import { ContactSection } from "./components/sections/ContactSection";
 import { Footer } from "./components/Footer";
 import { getLandingPageData } from "./lib/api";
+import { ProcessSection } from "./components/sections/ProcessSection";
 
 // --- DYNAMICZNE METADANE (SEO) ---
 export async function generateMetadata(): Promise<Metadata> {
@@ -77,6 +78,7 @@ export default async function Home() {
       <HeroSection data={sanityData.heroSection} />
       <AboutSection data={sanityData.aboutSection} />
       <CalendarSection data={sanityData.calendarSection} />
+      <ProcessSection />
       <TestimonialsSection data={sanityData.testimonialsSection} />
       <BlogSection
         headerData={sanityData.blogSection}
