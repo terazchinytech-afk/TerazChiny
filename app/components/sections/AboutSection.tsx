@@ -79,16 +79,16 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
     <section className="relative w-full bg-brand-red text-white landing-spacing pt-24 pb-32 overflow-hidden flex flex-col gap-32">
       {/* --- BLOK 1: STANDARDOWY (ZDJĘCIE PO LEWEJ) --- */}
       <div className="container mx-auto px-4 relative z-10">
-        <div className="flex flex-row max-[1024px]:flex-col gap-24 max-[1024px]:gap-20 items-center">
+        {/* ZMIANA: Zamiast flex, używamy GRID. 1 kolumna na mobile, 2 na desktopie (lg). */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* --- LEWA STRONA: ZDJĘCIA --- */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            // ZMIANA: Zmniejszony margines do -20px, żeby animacja odpalała się szybciej na mobile
             viewport={{ once: true, margin: "-20px" }}
             transition={{ duration: 0.8 }}
-            // ZMIANA: Usunięto flex-1 na rzecz w-full i konkretnych wysokości
-            className="relative w-full h-[500px] max-[1024px]:h-[450px] max-[640px]:h-[300px] shrink-0"
+            // ZMIANA: Wysokość responsywna, w-full
+            className="relative w-full h-[320px] sm:h-[450px] lg:h-[500px]"
           >
             {/* Główne zdjęcie */}
             <div className="absolute top-0 left-0 w-[88%] h-[88%] overflow-hidden shadow-2xl z-10 rounded-[29px]">
@@ -97,7 +97,7 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                   src={images.mainImage}
                   alt="Podróż do Chin"
                   fill
-                  className="object-cover border-[12px] max-[1024px]:border-[8px] border-gold rounded-[29px] pointer-cursor hover:scale-105 transition-transform duration-700"
+                  className="object-cover border-[8px] lg:border-[12px] border-gold rounded-[29px] pointer-cursor hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
@@ -127,11 +127,11 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
             </motion.div>
 
             {/* Ozdobna ramka w tle */}
-            <div className="absolute bottom-4 left-8 w-[85%] h-[85%] border-2 border-gold/30 -z-10 translate-x-4 translate-y-4 rounded-[29px] max-[640px]:hidden" />
+            <div className="absolute bottom-4 left-8 w-[85%] h-[85%] border-2 border-gold/30 -z-10 translate-x-4 translate-y-4 rounded-[29px] hidden sm:block" />
           </motion.div>
 
           {/* --- PRAWA STRONA: TEKST ORAZ STATYSTYKI --- */}
-          <div className="flex flex-col gap-10 w-full lg:flex-1">
+          <div className="flex flex-col gap-10 w-full">
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -140,11 +140,11 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
               className="flex flex-col gap-6"
             >
               <div className="space-y-4">
-                <h3 className="text-gold font-bold tracking-[3px] uppercase text-xs flex items-center gap-3 justify-start max-[1024px]:justify-center">
+                <h3 className="text-gold font-bold tracking-[3px] uppercase text-xs flex items-center gap-3 justify-center lg:justify-start">
                   <span className="w-10 h-[1px] bg-gold/50"></span>
                   {sectionTag}
                 </h3>
-                <h2 className="text-5xl max-[1024px]:text-4xl max-[640px]:text-3xl font-montserrat font-black text-white leading-[1.1] text-left max-[1024px]:text-center">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-montserrat font-black text-white leading-[1.1] text-center lg:text-left">
                   {titleParts.map((part, i) =>
                     part.toLowerCase() === title.highlight?.toLowerCase() ? (
                       <span
@@ -165,27 +165,27 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                   )}
                 </h2>
               </div>
-              <div className="space-y-5 text-white/70 font-montserrat leading-relaxed text-base max-[1024px]:text-sm text-left max-[1024px]:text-center max-w-2xl mx-0 max-[1024px]:mx-auto">
+              <div className="space-y-5 text-white/70 font-montserrat leading-relaxed text-sm sm:text-base text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
                 {description?.map((p, idx) => (
                   <p key={idx}>{p}</p>
                 ))}
               </div>
             </motion.div>
 
-            {/* Statystyki - używamy Grid dla precyzyjnego podziału */}
-            <div className="grid grid-cols-3 gap-6 max-[1024px]:gap-4 py-10 border-y border-white/10">
+            {/* Statystyki */}
+            <div className="grid grid-cols-3 gap-4 lg:gap-6 py-10 border-y border-white/10">
               {statistics?.map((stat, idx) => {
                 const Icon = ICON_MAP[stat.iconType] || Globe;
                 return (
                   <div
                     key={idx}
-                    className="flex flex-col items-start max-[1024px]:items-center gap-2"
+                    className="flex flex-col items-center lg:items-start gap-2"
                   >
                     <Icon size={24} className="text-gold" />
-                    <span className="text-3xl max-[640px]:text-2xl font-black text-white italic leading-none">
+                    <span className="text-2xl sm:text-3xl font-black text-white italic leading-none">
                       {stat.value}
                     </span>
-                    <span className="text-[10px] max-[640px]:text-[9px] font-bold text-white/40 uppercase tracking-[2px] text-left max-[1024px]:text-center">
+                    <span className="text-[9px] sm:text-[10px] font-bold text-white/40 uppercase tracking-[2px] text-center lg:text-left">
                       {stat.label}
                     </span>
                   </div>
