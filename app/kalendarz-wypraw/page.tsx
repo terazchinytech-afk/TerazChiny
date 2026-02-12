@@ -84,21 +84,18 @@ export default async function CalendarPage() {
     };
   });
 
-  // 2. AUTOMATYCZNE WYCIĄGANIE REGIONÓW
-  // Tworzymy zbiór (Set) unikalnych lokalizacji z pobranych wycieczek
   const uniqueRegions = Array.from(
     new Set(formattedTrips.map((trip: any) => trip.region)),
   )
     .filter(Boolean)
-    .sort(); // Usuwamy puste i sortujemy alfabetycznie
+    .sort();
 
-  // 3. Przekazujemy listę regionów do klienta
   return (
     <CalendarClient
       trips={formattedTrips}
       heroData={pageData?.heroSection}
       filterData={pageData?.filterSection}
-      availableRegions={uniqueRegions as any} // <-- NOWY PROP
+      availableRegions={uniqueRegions as any}
     />
   );
 }

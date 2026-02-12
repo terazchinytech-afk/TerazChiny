@@ -1,4 +1,3 @@
-// app/page.tsx
 import { Metadata } from "next";
 import { HeroSection } from "./components/sections/HeroSection";
 import { AboutSection } from "./components/sections/AboutSection";
@@ -10,8 +9,8 @@ import { ContactSection } from "./components/sections/ContactSection";
 import { Footer } from "./components/Footer";
 import { getLandingPageData } from "./lib/api";
 import { ProcessSection } from "./components/sections/ProcessSection";
+import { GallerySection } from "./components/sections/GallerySection";
 
-// --- DYNAMICZNE METADANE (SEO) ---
 export async function generateMetadata(): Promise<Metadata> {
   const sanityData = await getLandingPageData();
   const seo = sanityData?.seo;
@@ -58,9 +57,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// --- GŁÓWNY KOMPONENT STRONY ---
 export default async function Home() {
   const sanityData = await getLandingPageData();
+  console.log(sanityData.gallerySection);
 
   if (!sanityData) {
     return (
@@ -78,8 +77,9 @@ export default async function Home() {
       <HeroSection data={sanityData.heroSection} />
       <AboutSection data={sanityData.aboutSection} />
       <CalendarSection data={sanityData.calendarSection} />
-      <ProcessSection />
+      <ProcessSection data={sanityData.processSection} />
       <TestimonialsSection data={sanityData.testimonialsSection} />
+      <GallerySection data={sanityData.gallerySection} />
       <BlogSection
         headerData={sanityData.blogSection}
         posts={sanityData.blogSection?.latestPosts || []}

@@ -5,7 +5,7 @@ export const TripDetailsGrid = ({ trip }: { trip: FormattedTrip }) => {
   const details = [
     {
       icon: Calendar,
-      label: "Termin", // Skrócona nazwa dla lepszego wyglądu
+      label: "Termin",
       value: trip.dates,
       color: "text-blue-500",
       bg: "bg-blue-50",
@@ -34,30 +34,21 @@ export const TripDetailsGrid = ({ trip }: { trip: FormattedTrip }) => {
   ];
 
   return (
-    // ZMIANA: Mniejszy gap (gap-3).
-    // Od razu od 'md' (tablet) robimy 4 kolumny, żeby nie zajmowały tyle miejsca w pionie.
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       {details.map((item, index) => (
         <div
           key={index}
-          // ZMIANA STYLU NA KOMPAKTOWY:
-          // p-3: mały padding wewnątrz
-          // min-h-[110px]: znacznie mniejsza wysokość minimalna
-          // rounded-2xl: dopasowane zaokrąglenie do mniejszego rozmiaru
           className="flex flex-col items-center justify-center p-3 bg-white border border-gray-100 rounded-2xl shadow-sm text-center min-h-[110px] transition-transform hover:scale-[1.02] duration-300"
         >
-          {/* Mniejszy kontener ikony (p-2) */}
           <div className={`p-2 rounded-xl mb-2 ${item.bg}`}>
-            {/* Mniejsza ikona (w-5 h-5) */}
             <item.icon className={`w-5 h-5 ${item.color}`} />
           </div>
 
           <div className="flex flex-col items-center gap-0.5">
-            {/* Bardzo mały, czytelny label */}
             <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">
               {item.label}
             </p>
-            {/* Nieco mniejszy tekst wartości (text-xs/sm) */}
+
             <p className="text-xs sm:text-sm font-black text-gray-900 leading-tight">
               {item.value}
             </p>

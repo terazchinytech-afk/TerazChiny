@@ -46,7 +46,7 @@ export const blogPage = defineType({
       ],
     }),
   ],
-  // --- TUTAJ DODAEMY ROZWIĄZANIE ---
+
   preview: {
     select: {
       title: "seo.metaTitle",
@@ -58,5 +58,4 @@ export const blogPage = defineType({
       };
     },
   },
-  // --------------------------------
 });

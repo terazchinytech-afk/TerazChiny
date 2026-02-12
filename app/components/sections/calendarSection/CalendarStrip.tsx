@@ -28,7 +28,6 @@ export const CalendarStrip = ({
   const [activeVariant, setActiveVariant] = useState(1);
   const isInitialized = useRef(false);
 
-  // --- SMART INIT ---
   useEffect(() => {
     if (!isInitialized.current && events.length > 0) {
       const today = new Date();
@@ -62,7 +61,6 @@ export const CalendarStrip = ({
   }, [events, onYearChange, onMonthSelect]);
 
   return (
-    // ZMIANA: bg-transparent zamiast bg-white. Usunięto border-b.
     <div className="w-full relative bg-transparent font-montserrat z-20">
       <div className="container mx-auto px-4 max-w-[1200px] py-6">
         <div className="animate-in fade-in duration-500">

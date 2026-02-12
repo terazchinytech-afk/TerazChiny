@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { label: "Strona Główna", href: "/" },
   { label: "Kalendarz", href: "/kalendarz-wypraw" },
+  { label: "Galeria", href: "/galeria-zdjec" },
   { label: "Blog", href: "/blog" },
   { label: "Kontakt", href: "/#kontakt" },
 ];
@@ -58,7 +59,6 @@ export const NavBar = ({ className }: { className?: string }) => {
 
   const toggleMenu = () => setOpen((prev) => !prev);
 
-  // Optymalizacja scrolla dla hash-linków (Lepsze UX)
   useEffect(() => {
     if (isHomePage && typeof window !== "undefined" && window.location.hash) {
       const id = window.location.hash.replace("#", "");
@@ -97,7 +97,6 @@ export const NavBar = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     const handleScrollEvent = () => {
-      // Optymalizacja progu sticky (dodanie tolerancji)
       const currentScrollY = window.scrollY;
       if (currentScrollY >= 100 && !isSticky) {
         setIsSticky(true);
@@ -110,7 +109,6 @@ export const NavBar = ({ className }: { className?: string }) => {
     return () => window.removeEventListener("scroll", handleScrollEvent);
   }, [isSticky]);
 
-  // Memoizacja tła dla uniknięcia re-renderów warstwy tła
   const navBackground = useMemo(
     () => (isSticky ? "#b32a2ecc" : "transparent"),
     [isSticky],
@@ -118,7 +116,6 @@ export const NavBar = ({ className }: { className?: string }) => {
 
   return (
     <>
-      {/* Gradient tła (tylko na podstronach) */}
       {!isHomePage && !isSticky && (
         <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#b32a2e] to-transparent z-[90] pointer-events-none" />
       )}
@@ -140,7 +137,7 @@ export const NavBar = ({ className }: { className?: string }) => {
             ? "fixed top-0 left-0 w-full shadow-2xl shadow-black/10"
             : "absolute top-0 left-0 w-full"
         } ${className}`}
-        style={{ willChange: "transform, background-color" }} // Optymalizacja GPU
+        style={{ willChange: "transform, background-color" }}
       >
         <div className="container mx-auto px-4 md:px-12 flex flex-row justify-between items-center relative z-[101]">
           <div className="relative z-50">
@@ -151,7 +148,7 @@ export const NavBar = ({ className }: { className?: string }) => {
                 height={40}
                 width={168}
                 className="object-contain cursor-pointer"
-                priority // Kluczowe dla LCP i CLS
+                priority
               />
             </Link>
           </div>

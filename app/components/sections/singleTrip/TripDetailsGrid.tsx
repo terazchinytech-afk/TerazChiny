@@ -34,25 +34,16 @@ export const TripDetailsGrid = ({ trip }: { trip: FormattedTrip }) => {
   ];
 
   return (
-    // Grid trzymający karty w dwóch kolumnach
     <div className="grid grid-cols-2 gap-4">
       {details.map((item, index) => (
         <div
           key={index}
-          // --- GŁÓWNE ZMIANY STYLU KARTY ---
-          // bg-white: białe tło
-          // shadow-sm: delikatny cień
-          // border-gray-100: subtelne obramowanie
-          // rounded-3xl: mocne zaokrąglenie rogów
-          // p-5 min-h-[150px]: trochę więcej przestrzeni
           className="flex flex-col items-center justify-center p-5 bg-white border border-gray-100 rounded-3xl shadow-sm text-center min-h-[150px] transition-transform hover:scale-[1.02] duration-300"
         >
-          {/* Ikona w kolorowym kółku */}
           <div className={`p-3 rounded-2xl mb-3 ${item.bg}`}>
             <item.icon className={`w-6 h-6 ${item.color}`} />
           </div>
 
-          {/* Teksty wycentrowane */}
           <div className="flex flex-col items-center gap-1">
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
               {item.label}

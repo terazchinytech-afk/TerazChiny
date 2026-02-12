@@ -8,7 +8,7 @@ interface CalendarDebugPanelProps {
   setActiveVariant: (variant: number) => void;
   selectedYear: number;
   selectedMonth: string;
-  eventCount?: number; // <--- DODANO TO POLE (opcjonalne)
+  eventCount?: number;
 }
 
 export const CalendarDebugPanel = ({
@@ -16,7 +16,7 @@ export const CalendarDebugPanel = ({
   setActiveVariant,
   selectedYear,
   selectedMonth,
-  eventCount = 0, // <--- Odbieramy props z wartością domyślną
+  eventCount = 0,
 }: CalendarDebugPanelProps) => {
   const [isOpen, setIsOpen] = React.useState(true);
 
@@ -33,7 +33,6 @@ export const CalendarDebugPanel = ({
 
   return (
     <div className="fixed bottom-5 right-5 z-50 w-[280px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden animate-in slide-in-from-bottom-5 fade-in duration-300">
-      {/* Header Panelu */}
       <div className="bg-gray-900 text-white px-4 py-3 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Settings2 size={16} />
@@ -49,9 +48,7 @@ export const CalendarDebugPanel = ({
         </button>
       </div>
 
-      {/* Treść Panelu */}
       <div className="p-4 flex flex-col gap-4">
-        {/* Wybór Wariantu */}
         <div className="flex flex-col gap-2">
           <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
             Wybierz Styl
@@ -85,7 +82,6 @@ export const CalendarDebugPanel = ({
           </div>
         </div>
 
-        {/* Monitor Stanu */}
         <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
           <label className="text-[9px] uppercase font-bold text-gray-400 tracking-wider block mb-1">
             Aktualny Stan
@@ -99,7 +95,6 @@ export const CalendarDebugPanel = ({
             <span className="font-bold text-gray-900">{selectedMonth}</span>
           </div>
 
-          {/* Dodano wyświetlanie liczby eventów */}
           <div className="flex justify-between items-center text-xs font-mono mt-1 text-blue-600">
             <span className="flex items-center gap-1">
               <Database size={10} /> Events:

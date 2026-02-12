@@ -6,7 +6,8 @@ import { trip } from "./trip";
 import { review } from "./review";
 import { calendarPage } from "./calendarPage";
 import { blogPage } from "./blogPage";
+import { galleryYear } from "./galleryYear";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [landingPage, trip, post, review, calendarPage, blogPage],
+  types: [landingPage, trip, post, review, calendarPage, blogPage, galleryYear],
 };

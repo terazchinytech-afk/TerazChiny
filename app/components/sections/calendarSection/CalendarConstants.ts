@@ -1,5 +1,3 @@
-// sections/calendarSection/CalendarConstants.ts
-
 export const MONTHS_BASE = [
   { label: "Styczeń", value: "STY" },
   { label: "Luty", value: "LUT" },
@@ -15,7 +13,6 @@ export const MONTHS_BASE = [
   { label: "Grudzień", value: "GRU" },
 ];
 
-// Definition moved here for global access
 export interface FormattedTrip {
   id: string;
   year: number;
@@ -37,5 +34,5 @@ export interface CalendarStripProps {
   selectedMonth: string;
   onYearChange: (year: number) => void;
   onMonthSelect: (month: string) => void;
-  events: FormattedTrip[]; // Added this prop
+  events: FormattedTrip[];
 }

@@ -12,7 +12,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-// --- INTERFEJSY ---
 export interface Trip {
   slug: string;
   id: string;
@@ -33,7 +32,6 @@ interface TripCardProps {
   index: number;
 }
 
-// --- FUNKCJA TRUNCATE ---
 const truncateText = (text: string, maxLength: number) => {
   if (!text) return "";
   if (text.length <= maxLength) return text;
@@ -42,7 +40,6 @@ const truncateText = (text: string, maxLength: number) => {
   return truncated.slice(0, lastSpace > 0 ? lastSpace : maxLength) + "...";
 };
 
-// --- STATUS BADGE ---
 const StatusBadge = ({ status }: { status: string }) => {
   if (status === "sold_out") {
     return (
@@ -82,7 +79,6 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
         ${isSoldOut ? "opacity-60 grayscale-[0.8] pointer-events-none" : ""}
       `}
     >
-      {/* 1. ZDJĘCIE */}
       <div className="relative w-full min-[1031px]:basis-80 shrink-0 h-64 min-[1031px]:h-auto overflow-hidden">
         <Image
           src={trip.image}
@@ -100,9 +96,7 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
         </div>
       </div>
 
-      {/* 2. TREŚĆ */}
       <div className="flex flex-col flex-1 p-6 min-[1031px]:p-8 min-w-0">
-        {/* Info bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <StatusBadge status={trip.spots} />
           <div className="flex items-center gap-4 text-xs font-medium text-gray-400">
@@ -115,7 +109,6 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
           </div>
         </div>
 
-        {/* Tytuł i Opis */}
         <div className="flex-grow min-w-0">
           <h3 className="text-xl min-[1031px]:text-2xl font-bold text-gray-900 group-hover:text-[#b32a2e] transition-colors leading-tight mb-3 break-words">
             {trip.title}
@@ -125,7 +118,6 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
           </p>
         </div>
 
-        {/* STOPKA DLA MOBILE (poniżej 1030px) */}
         <div className="flex min-[1031px]:hidden items-center justify-between pt-6 border-t border-gray-100 mt-6 max-[550px]:mt-4 max-[550px]:pt-4">
           <div className="flex flex-col">
             <p className="text-[10px] uppercase font-bold text-gray-400 mb-0.5">
@@ -140,7 +132,6 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
             href={`/kalendarz-wypraw/${trip.slug}`}
             className="max-[550px]:ml-4 cursor-pointer"
           >
-            {/* Przycisk zmienia się na mniejszy (tylko ikona lub krótki tekst) poniżej 550px */}
             <button className="bg-[#b32a2e] cursor-pointer text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
               <span className="max-[380px]:hidden">Szczegóły</span>
               <ArrowRight
@@ -152,7 +143,6 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
         </div>
       </div>
 
-      {/* 3. PANEL CENY DLA DESKTOP (powyżej 1030px) */}
       <div className="hidden min-[1031px]:flex flex-col justify-between items-end w-72 shrink-0 p-8 bg-gray-50/50 border-l border-gray-100 group-hover:bg-[#b32a2e]/5 transition-colors text-right">
         <div className="flex flex-col gap-1">
           <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">

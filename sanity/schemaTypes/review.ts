@@ -43,7 +43,7 @@ export const review = defineType({
       to: [{ type: "trip" }],
     }),
     defineField({
-      name: "reviewImage", // Zmieniona nazwa na bardziej opisową
+      name: "reviewImage",
       title: "Zdjęcie z wyprawy",
       type: "image",
       options: { hotspot: true },

@@ -7,15 +7,14 @@ import { pl } from "date-fns/locale";
 export default async function BlogPage() {
   const sanityPosts = await getAllPosts();
 
-  // Mapujemy dane z Sanity, aby pasowały do formatu Twojego komponentu
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const formattedPosts = sanityPosts.map((post: any) => ({
     ...post,
-    // Formatujemy datę na np. "02 LUT 2026"
+
     date: post.date
       ? format(new Date(post.date), "dd MMM yyyy", { locale: pl }).toUpperCase()
       : "BRAK DATY",
-    // Upewniamy się, że obrazek zawsze istnieje
+
     image: post.image || "/heroBackground.png",
   }));
 

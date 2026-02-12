@@ -16,9 +16,6 @@ import {
   Calendar as CalendarIcon,
 } from "lucide-react";
 
-// --- HELPERY ZOPTYMALIZOWANE LOGICZNIE ---
-
-// Zapobiega błędom 500/Timeout przy gigantycznych zdjęciach z Sanity
 const getOptimizedImageUrl = (url: string, width = 400) => {
   if (!url) return "";
   try {
@@ -33,7 +30,6 @@ const getOptimizedImageUrl = (url: string, width = 400) => {
 };
 
 const getStatusText = (status: string) => {
-  // Obsługuje oba formaty: last-spots i last_spots
   const s = status?.replace("-", "_");
   switch (s) {
     case "available":
@@ -64,8 +60,6 @@ const formatDate = (dateString: string) => {
     year: date.getFullYear().toString(),
   };
 };
-
-// --- INTERFEJSY ---
 
 interface Trip {
   title: string;
@@ -100,7 +94,6 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
 
   const { header, tripsSettings } = data;
 
-  // Memoizacja zapobiega zbędnym przeliczeniom przy animacjach
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const trips = useMemo(
     () => tripsSettings?.selectedTrips || [],

@@ -21,7 +21,6 @@ interface CalendarClientProps {
 
 const ITEMS_PER_PAGE = 4;
 
-// MAPOWANIE SEZONÓW (Musi być zgodne z ID w CalendarVariant3)
 const SEASON_MAPPING: Record<string, string[]> = {
   early_winter: ["STY", "LUT"],
   spring: ["MAR", "KWI", "MAJ"],
@@ -52,17 +51,14 @@ export default function CalendarClient({
 
     let filtered = [...trips];
 
-    // 1. Filtr Regionu
     if (selectedRegion !== "Wszystkie regiony") {
       filtered = filtered.filter((trip) => trip.region === selectedRegion);
     }
 
-    // 2. Logika Roku i "Wszystkie Terminy"
     if (selectedYear === 0) {
-      // Jeśli wybrano "Wszystkie", pokazujemy przyszłe wyprawy z wszystkich lat
       filtered = filtered.filter((trip) => {
         const monthIndex = MONTHS_BASE.findIndex((m) => m.value === trip.month);
-        // Bezpieczne tworzenie daty (dzień 1, jeśli brak)
+
         const tripDate = new Date(
           trip.year,
           monthIndex !== -1 ? monthIndex : 0,
@@ -71,19 +67,15 @@ export default function CalendarClient({
         return tripDate >= today;
       });
     } else {
-      // Standardowe filtrowanie po roku
       filtered = filtered.filter((trip) => trip.year === selectedYear);
 
-      // 3. Filtr Miesiąca LUB Sezonu
       if (selectedMonth !== "ALL") {
         if (selectedMonth in SEASON_MAPPING) {
-          // A. JEST TO SEZON (np. "summer") -> Sprawdź czy miesiąc wyprawy jest w liście
           const allowedMonths = SEASON_MAPPING[selectedMonth];
           filtered = filtered.filter((trip) =>
             allowedMonths.includes(trip.month),
           );
         } else {
-          // B. JEST TO ZWYKŁY MIESIĄC (np. "MAJ")
           filtered = filtered.filter((trip) => trip.month === selectedMonth);
         }
       }
@@ -116,12 +108,10 @@ export default function CalendarClient({
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Helper do wyświetlania nazwy filtra w nagłówku listy
   const getFilterLabel = () => {
     if (selectedYear === 0) return "Nadchodzące wyprawy";
     if (selectedMonth === "ALL") return `Rok ${selectedYear}`;
 
-    // Tłumaczenie labeli sezonów dla nagłówka
     const seasonLabels: Record<string, string> = {
       early_winter: "Zima (Styczeń-Luty)",
       spring: "Wiosna",
@@ -139,7 +129,6 @@ export default function CalendarClient({
 
   return (
     <main className="min-h-screen font-montserrat bg-white">
-      {/* ... Hero Section ... */}
       <div className="relative w-full min-h-[650px] h-[85vh] max-[1024px]:h-auto max-[1024px]:pb-12 bg-white max-[1024px]:mb-44">
         <div className="relative h-full w-full rounded-b-[60px] max-[768px]:rounded-b-[40px] shadow-xl z-10">
           <Image

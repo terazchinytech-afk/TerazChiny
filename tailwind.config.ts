@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import typography from "@tailwindcss/typography"; // Importujemy wtyczkę
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   content: [
@@ -8,13 +8,9 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
-      // Twoje kolory i ustawienia
-    },
+    extend: {},
   },
-  plugins: [
-    typography, // Używamy zaimportowanej zmiennej
-  ],
+  plugins: [typography],
 };
 
 export default config;

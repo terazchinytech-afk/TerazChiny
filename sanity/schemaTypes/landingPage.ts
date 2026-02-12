@@ -8,25 +8,26 @@ import {
   Phone,
   LayoutTemplate,
   Image as ImageIcon,
-  MapPin,
-  Globe,
-  Users,
   MessageSquare,
   Anchor,
   Search,
+  Footprints,
 } from "lucide-react";
+import { MultiGalleryPicker } from "../components/MultiGalleryPicker";
 
 export const landingPage = defineType({
   name: "landingPage",
   title: "Strona Główna (Landing)",
   type: "document",
   icon: Home,
-  // Dzielimy panel na zakładki, żeby nie było "ściany" pól
+
   groups: [
     { name: "hero", title: "Hero (Slider)", icon: LayoutTemplate },
     { name: "about", title: "O Nas", icon: Info },
     { name: "calendar", title: "Kalendarz", icon: Calendar },
+    { name: "what_next", title: "Co dalej?", icon: Footprints },
     { name: "testimonials", title: "Opinie", icon: MessageSquare },
+    { name: "gallery", title: "Galeria", icon: ImageIcon },
     { name: "blog", title: "Blog", icon: BookOpen },
     { name: "faq", title: "FAQ", icon: HelpCircle },
     { name: "contact", title: "Kontakt", icon: Phone },
@@ -34,7 +35,6 @@ export const landingPage = defineType({
     { name: "seo", title: "SEO / Meta", icon: Search },
   ],
   fields: [
-    // --- 1. SEKCJA HERO ---
     defineField({
       name: "heroSection",
       title: "Sekcja Hero",
@@ -62,7 +62,6 @@ export const landingPage = defineType({
       ],
     }),
 
-    // --- 2. SEKCJA O NAS ---
     defineField({
       name: "aboutSection",
       title: "Sekcja O Nas",
@@ -102,6 +101,45 @@ export const landingPage = defineType({
           of: [{ type: "text", rows: 3 }],
         }),
         defineField({
+          name: "statistics",
+          title: "Statystyki",
+          type: "array",
+          validation: (Rule) =>
+            Rule.max(3).error("Możesz dodać maksymalnie 3 karty statystyk."),
+          of: [
+            {
+              type: "object",
+              fields: [
+                defineField({
+                  name: "label",
+                  title: "Etykieta",
+                  type: "string",
+                }),
+                defineField({
+                  name: "value",
+                  title: "Wartość",
+                  type: "string",
+                }),
+                defineField({
+                  name: "iconType",
+                  title: "Ikona",
+                  type: "string",
+                  options: {
+                    list: [
+                      { title: "Kula Ziemska (Globe)", value: "Globe" },
+                      { title: "Mapa (Map)", value: "Map" },
+                      { title: "Ludzie (Users)", value: "Users" },
+                    ],
+                  },
+                }),
+              ],
+              preview: {
+                select: { title: "label", subtitle: "value" },
+              },
+            },
+          ],
+        }),
+        defineField({
           name: "images",
           title: "Zdjęcia (Górny blok)",
           type: "object",
@@ -121,7 +159,6 @@ export const landingPage = defineType({
           ],
         }),
 
-        // --- NOWA SEKCJA: WYRÓŻNIKI (ODWRÓCONY LAYOUT) ---
         defineField({
           name: "differentiation",
           title: "Nasze Wyróżniki (Blok dolny - odwrócony)",
@@ -165,50 +202,9 @@ export const landingPage = defineType({
             }),
           ],
         }),
-
-        defineField({
-          name: "statistics",
-          title: "Statystyki",
-          type: "array",
-          validation: (Rule) =>
-            Rule.max(3).error("Możesz dodać maksymalnie 3 karty statystyk."),
-          of: [
-            {
-              type: "object",
-              fields: [
-                defineField({
-                  name: "label",
-                  title: "Etykieta",
-                  type: "string",
-                }),
-                defineField({
-                  name: "value",
-                  title: "Wartość",
-                  type: "string",
-                }),
-                defineField({
-                  name: "iconType",
-                  title: "Ikona",
-                  type: "string",
-                  options: {
-                    list: [
-                      { title: "Kula Ziemska (Globe)", value: "Globe" },
-                      { title: "Mapa (Map)", value: "Map" },
-                      { title: "Ludzie (Users)", value: "Users" },
-                    ],
-                  },
-                }),
-              ],
-              preview: {
-                select: { title: "label", subtitle: "value" },
-              },
-            },
-          ],
-        }),
       ],
     }),
 
-    // --- 3. SEKCJA KALENDARZ ---
     defineField({
       name: "calendarSection",
       title: "Sekcja Kalendarz",
@@ -225,7 +221,7 @@ export const landingPage = defineType({
               title: "Badge (np. Sezon)",
               type: "string",
             }),
-            // --- ZMIANA: NOWY SPOSÓB NA TYTUŁ ---
+
             defineField({
               name: "title",
               title: "Tytuł Sekcji",
@@ -246,7 +242,7 @@ export const landingPage = defineType({
                 }),
               ],
             }),
-            // ------------------------------------
+
             defineField({
               name: "description",
               title: "Opis",
@@ -292,7 +288,143 @@ export const landingPage = defineType({
         }),
       ],
     }),
-    // --- SEKCJA OPINIE (TESTIMONIALS) ---
+    defineField({
+      name: "processSection",
+      title: "Sekcja Proces (Co dalej?)",
+      type: "object",
+      group: "what_next",
+      fields: [
+        defineField({
+          name: "header",
+          title: "Nagłówek",
+          type: "object",
+          fields: [
+            defineField({
+              name: "badge",
+              title: "Badge (Nad tytułem)",
+              type: "string",
+              initialValue: "Plan wyjazdu",
+            }),
+            defineField({
+              name: "mainTitle",
+              title: "Tytuł Główny (Górny wiersz)",
+              type: "string",
+              initialValue: "Kupiłeś bilet.",
+            }),
+            defineField({
+              name: "highlightedTitle",
+              title: "Tytuł Wyróżniony (Dolny wiersz - złoty)",
+              type: "string",
+              initialValue: "Co dzieje się teraz?",
+            }),
+          ],
+        }),
+
+        defineField({
+          name: "step1",
+          title: "Krok 01 ",
+          type: "object",
+          fields: [
+            defineField({
+              name: "stepName",
+              title: "Nazwa Kroku",
+              type: "string",
+              initialValue: "FORMALNOŚCI",
+            }),
+            defineField({
+              name: "title",
+              title: "Tytuł",
+              type: "string",
+              initialValue: "My załatwiamy wizę. Ty się pakujesz.",
+            }),
+            defineField({
+              name: "description",
+              title: "Opis",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+        }),
+
+        defineField({
+          name: "step2",
+          title: "Krok 02 ",
+          type: "object",
+          fields: [
+            defineField({
+              name: "stepName",
+              title: "Nazwa Kroku",
+              type: "string",
+              initialValue: "PRZYGOTOWANIE",
+            }),
+            defineField({
+              name: "title",
+              title: "Tytuł",
+              type: "string",
+              initialValue: "Odprawa i Wiedza",
+            }),
+            defineField({
+              name: "description",
+              title: "Opis",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+        }),
+
+        defineField({
+          name: "step3",
+          title: "Krok 03 ",
+          type: "object",
+          fields: [
+            defineField({
+              name: "stepName",
+              title: "Nazwa Kroku",
+              type: "string",
+              initialValue: "LOTNISKO",
+            }),
+            defineField({
+              name: "title",
+              title: "Tytuł",
+              type: "string",
+              initialValue: "Spotkanie w Warszawie",
+            }),
+            defineField({
+              name: "description",
+              title: "Opis",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+        }),
+
+        defineField({
+          name: "step4",
+          title: "Krok 04",
+          type: "object",
+          fields: [
+            defineField({
+              name: "stepName",
+              title: "Nazwa Kroku",
+              type: "string",
+              initialValue: "LĄDOWANIE",
+            }),
+            defineField({
+              name: "title",
+              title: "Tytuł",
+              type: "string",
+              initialValue: "Prywatny Transfer",
+            }),
+            defineField({
+              name: "description",
+              title: "Opis",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+        }),
+      ],
+    }),
     defineField({
       name: "testimonialsSection",
       title: "Sekcja Opinie",
@@ -328,7 +460,6 @@ export const landingPage = defineType({
           ],
         }),
 
-        // Tutaj wybieramy opinie z bazy danych
         defineField({
           name: "selectedReviews",
           title: "Wybierz Opinie",
@@ -338,13 +469,89 @@ export const landingPage = defineType({
           of: [
             {
               type: "reference",
-              to: [{ type: "review" }], // Odwołujemy się do schematu 'review.ts'
+              to: [{ type: "review" }],
             },
           ],
         }),
       ],
     }),
-    // --- 4. SEKCJA BLOG ---
+    defineField({
+      name: "gallerySection",
+      title: "Sekcja Galeria (Przewijak)",
+      type: "object",
+      group: "gallery",
+      fields: [
+        defineField({
+          name: "tag",
+          title: "Tag sekcji",
+          type: "string",
+          initialValue: "Wspomnienia",
+        }),
+        defineField({
+          name: "title",
+          title: "Nagłówek",
+          type: "string",
+          initialValue: "Galeria z naszych wypraw",
+        }),
+        defineField({
+          name: "description",
+          title: "Opis",
+          type: "text",
+          rows: 3,
+        }),
+
+        // --- MULTI-PICKER ---
+        defineField({
+          name: "selectedImages",
+          title: "Wybrane zdjęcia",
+          description:
+            "Kliknij poniżej, aby zarządzać zdjęciami na stronie głównej.",
+          type: "array",
+          // Podpinamy nasz Custom Input
+          components: {
+            input: MultiGalleryPicker,
+          },
+          of: [
+            {
+              type: "object",
+              name: "galleryImageWrapper",
+              fields: [
+                // Tutaj zapisujemy ID
+                defineField({ name: "reference", type: "string" }),
+                // Tutaj zapisujemy ROK (TAG)
+                defineField({ name: "tag", title: "Rok", type: "string" }),
+              ],
+              // Podgląd w liście (jeśli kiedyś wyłączysz custom input)
+              preview: {
+                select: { title: "tag", subtitle: "reference" },
+                prepare({ title, subtitle }) {
+                  return {
+                    title: `Rok: ${title}`,
+                    subtitle: subtitle,
+                  };
+                },
+              },
+            },
+          ],
+          // Używamy customowej walidacji dla pewności
+          validation: (Rule) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            Rule.custom((value: any) => {
+              if (!value) return "Musisz dodać zdjęcia.";
+              if (value.length < 9) {
+                return `Wybrano ${value.length} z 9 wymaganych zdjęć. Brakuje jeszcze ${9 - value.length}.`;
+              }
+              return true;
+            }).error(), // .error() blokuje publikację (czerwony komunikat)
+        }),
+
+        defineField({
+          name: "ctaText",
+          title: "Tekst przycisku",
+          type: "string",
+        }),
+      ],
+    }),
     defineField({
       name: "blogSection",
       title: "Sekcja Blog",
@@ -385,7 +592,6 @@ export const landingPage = defineType({
       ],
     }),
 
-    // --- 5. SEKCJA FAQ ---
     defineField({
       name: "faqSection",
       title: "Sekcja FAQ",
@@ -449,7 +655,6 @@ export const landingPage = defineType({
       ],
     }),
 
-    // --- 6. SEKCJA KONTAKT ---
     defineField({
       name: "contactSection",
       title: "Sekcja Kontakt",
@@ -463,7 +668,6 @@ export const landingPage = defineType({
           options: { hotspot: true },
         }),
 
-        // --- ZMIANA: NOWY STANDARD TYTUŁU ---
         defineField({
           name: "headline",
           title: "Nagłówek",
@@ -484,7 +688,6 @@ export const landingPage = defineType({
             }),
           ],
         }),
-        // ------------------------------------
 
         defineField({
           name: "description",
@@ -601,14 +804,12 @@ export const landingPage = defineType({
   ],
   preview: {
     select: {
-      // Pobieramy tytuł z sekcji Hero, żeby wyświetlić go jako ciekawostkę w podtytule
       title: "heroSection.mainTitle",
     },
     prepare({ title }) {
       return {
-        // GŁÓWNY TYTUŁ (To naprawi ten bałagan na górze)
         title: "Strona Główna (Landing)",
-        // PODTYTUŁ (Opcjonalnie pokaże tytuł z sekcji Hero lub tekst statyczny)
+
         subtitle: title
           ? `Nagłówek: ${title}`
           : "Zarządzanie treścią strony głównej",

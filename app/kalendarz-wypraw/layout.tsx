@@ -14,7 +14,7 @@ export default async function CalendarLayout({
     <div className="flex flex-col min-h-screen bg-[#F8F8F6] top-0">
       <NavBar className="" />
       <main className="flex-grow">{children}</main>
-      {/* Jeśli RootLayout ma stopkę, usuń te dwie linie poniżej */}
+
       <Footer data={footerData} />
     </div>
   );

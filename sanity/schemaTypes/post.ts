@@ -11,7 +11,6 @@ export const post = defineType({
     { name: "seo", title: "SEO" },
   ],
   fields: [
-    // --- GRUPA: TREŚĆ ---
     defineField({
       name: "title",
       title: "Tytuł artykułu",
@@ -66,7 +65,6 @@ export const post = defineType({
       of: [{ type: "block" }, { type: "image" }],
     }),
 
-    // --- GRUPA: SEO (Tylko Tagi) ---
     defineField({
       name: "keywords",
       title: "Słowa kluczowe (SEO Tags)",

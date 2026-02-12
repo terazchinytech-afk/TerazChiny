@@ -3,14 +3,12 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
 
-// Konfiguracja Inter (główny tekst)
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
 });
 
-// Konfiguracja Montserrat (ozdobny/nagłówki)
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
@@ -29,10 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        // Dodajemy obie zmienne CSS do body
-        className={`${inter.variable} ${montserrat.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
         {children}
       </body>
     </html>

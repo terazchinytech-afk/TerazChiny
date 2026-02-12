@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { PortableText } from "@portabletext/react";
 import { Calendar, Clock, ChevronLeft, Share2 } from "lucide-react";
 
-// --- CUSTOM RENDERER DLA SANITY PORTABLE TEXT ---
 const portableTextComponents = {
   block: {
     h2: ({ children }: any) => (
@@ -92,7 +91,6 @@ export const BlogPostClient = ({
 }: BlogPostClientProps) => {
   return (
     <main className="relative min-h-screen bg-[#b32a2e] pb-32 pt-12 overflow-hidden ">
-      {/* Tekstura tła */}
       <Image
         src="/symbol.svg"
         width={300}
@@ -193,7 +191,6 @@ export const BlogPostClient = ({
           <PortableText value={post.body} components={portableTextComponents} />
         </article>
 
-        {/* SEKCJA REKOMENDACJI */}
         <section className="mt-32 pt-20 border-t border-white/10">
           <h3 className="montserrat text-2xl font-bold text-white mb-12 uppercase tracking-tighter border-l-4 border-gold pl-4">
             Zobacz również

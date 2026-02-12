@@ -1,5 +1,5 @@
 import { defineField, defineType } from "sanity";
-import { Plane, ClipboardList, HelpCircle, Star } from "lucide-react";
+import { Plane, HelpCircle } from "lucide-react";
 
 export const trip = defineType({
   name: "trip",
@@ -14,7 +14,6 @@ export const trip = defineType({
     { name: "seo", title: "SEO" },
   ],
   fields: [
-    // --- GRUPA: PODSTAWOWE ---
     defineField({
       name: "title",
       title: "Nazwa Wyprawy",
@@ -50,7 +49,6 @@ export const trip = defineType({
       initialValue: "available",
     }),
 
-    // --- GRUPA: SZCZEGÓŁY (Karta i Grid) ---
     defineField({
       name: "date",
       title: "Data Rozpoczęcia",
@@ -92,11 +90,11 @@ export const trip = defineType({
       name: "bookingUrl",
       title: "Link do rezerwacji",
       type: "url",
-      group: "details", // <--- DODAJ TĘ LINIĘ
+      group: "details",
       description:
         "Zewnętrzny link do formularza rezerwacji (np. Typeform, Google Forms). Jeśli zostawisz puste, przycisk może prowadzić do strony kontaktu.",
     }),
-    // --- GRUPA: TREŚĆ STRONY (Content) ---
+
     defineField({
       name: "mainImage",
       title: "Zdjęcie Główne",

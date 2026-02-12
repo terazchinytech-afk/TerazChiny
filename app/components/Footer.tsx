@@ -6,7 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, Phone, Instagram, Facebook, ChevronUp } from "lucide-react";
 
-// Linki nawigacyjne pozostają statyczne (zgodnie z projektem)
 const navLinks = [
   { label: "Strona Główna", href: "/" },
   { label: "Kalendarz", href: "/kalendarz-wypraw" },
@@ -14,7 +13,6 @@ const navLinks = [
   { label: "Kontakt", href: "/#kontakt" },
 ];
 
-// Typy danych z Sanity
 interface FooterProps {
   data: {
     socials?: {
@@ -29,7 +27,6 @@ interface FooterProps {
 }
 
 export const Footer = ({ data }: FooterProps) => {
-  // Wyciągamy dane z Sanity z zabezpieczeniem (Memoizacja dla wydajności)
   const { socials, contactInfo } = data || {};
 
   const email = useMemo(
@@ -53,7 +50,6 @@ export const Footer = ({ data }: FooterProps) => {
   return (
     <footer className="bg-[#b32a2e] text-white pt-16 border-gold/20 border-t-1 font-montserrat">
       <div className="container mx-auto px-4">
-        {/* --- WIDOK MOBILNY --- */}
         <div className="flex-col gap-6 max-w-[50%] hidden max-[800px]:flex items-center justify-center self-center justify-self-center mb-24 text-center max-[550px]:max-w-full">
           <div className="relative mb-2 w-[180px] h-[50px]">
             <Image
@@ -109,9 +105,7 @@ export const Footer = ({ data }: FooterProps) => {
           </button>
         </div>
 
-        {/* --- WIDOK DESKTOP --- */}
         <div className="flex flex-row flex-wrap justify-between max-[800px]:justify-around gap-12 max-[496px]:text-center">
-          {/* KOLUMNA 1 */}
           <div className="flex flex-col items-start gap-6 max-w-[30%] max-[800px]:hidden">
             <div className="relative mb-2 w-[180px] h-[50px]">
               <Image
@@ -167,7 +161,6 @@ export const Footer = ({ data }: FooterProps) => {
             </button>
           </div>
 
-          {/* KOLUMNA 2 */}
           <div className="flex flex-col md:pl-10 pt-4">
             <h3 className="font-bold text-lg mb-6 max-[497px]:text-center">
               Mapa Strony
@@ -186,7 +179,6 @@ export const Footer = ({ data }: FooterProps) => {
             </ul>
           </div>
 
-          {/* KOLUMNA 3 (DANE DYNAMICZNE) */}
           <div className="flex flex-col pt-4">
             <h3 className="font-bold text-lg mb-6 max-[497px]:text-center">
               Kontakt
@@ -219,7 +211,6 @@ export const Footer = ({ data }: FooterProps) => {
           </div>
         </div>
 
-        {/* COPYRIGHT */}
         <div className="mt-16 pt-8 border-t border-white/10 text-center text-xs text-white/50">
           <p>
             © {new Date().getFullYear()} Teraz Chiny. Wszelkie prawa

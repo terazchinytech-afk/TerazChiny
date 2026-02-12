@@ -10,8 +10,6 @@ export default function StudioPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Symulujemy małe opóźnienie, żeby animacja nie mignęła zbyt szybko,
-    // albo po prostu ustawiamy true od razu, jeśli wolisz.
     const timer = setTimeout(() => setMounted(true), 500);
     return () => clearTimeout(timer);
   }, []);
@@ -24,13 +22,12 @@ export default function StudioPage() {
         position: "relative",
       }}
     >
-      {/* AnimatePresence pozwala na animację znikania komponentu z drzewa DOM */}
       <AnimatePresence>
         {!mounted && (
           <motion.div
             key="loader"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.5 } }} // Płynne znikanie
+            exit={{ opacity: 0, transition: { duration: 0.5 } }}
             className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#121212]"
           >
             {/* LOGO */}
@@ -50,7 +47,6 @@ export default function StudioPage() {
               />
             </motion.div>
 
-            {/* SPINNER FRAMER MOTION */}
             <div className="flex items-center justify-center gap-2 h-16">
               {[0, 1, 2].map((index) => (
                 <motion.div
@@ -60,7 +56,6 @@ export default function StudioPage() {
                     backgroundColor: "#efd075",
                     borderRadius: 9999,
                   }}
-                  // Tablica wartości tworzy pętlę: start -> góra -> dół
                   animate={{
                     height: [20, 50, 20],
                     opacity: [0.5, 1, 0.5],
@@ -69,7 +64,7 @@ export default function StudioPage() {
                     duration: 1,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: index * 0.2, // Opóźnienie dla każdej kolumny (efekt fali)
+                    delay: index * 0.2,
                   }}
                 />
               ))}

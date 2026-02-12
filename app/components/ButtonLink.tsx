@@ -22,11 +22,9 @@ export const ButtonLink = ({
   className = "",
   onClick,
 }: ButtonLinkProps) => {
-  // Style bazowe oparte na Twoim przykładzie
   const baseStyles =
     "montserrat inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-bold text-sm transition-all duration-300 shadow-lg cursor-pointer";
 
-  // Warianty kolorystyczne wykorzystujące Twoje zmienne z @theme
   const variants = {
     gold: "bg-gold text-brand-red hover:bg-white hover:scale-105",
     red: "bg-brand-red text-white hover:bg-gold hover:text-brand-red",

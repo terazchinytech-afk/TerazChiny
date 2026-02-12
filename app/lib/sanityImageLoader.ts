@@ -1,4 +1,3 @@
-// app/lib/sanityImageLoader.ts
 export default function sanityImageLoader({
   src,
   width,
@@ -8,7 +7,6 @@ export default function sanityImageLoader({
   width: number;
   quality?: number;
 }) {
-  // 1. Jeśli to lokalny plik (zaczyna się od /), nie twórz obiektu URL, tylko go zwróć
   if (src.startsWith("/")) {
     return src;
   }
@@ -16,7 +14,6 @@ export default function sanityImageLoader({
   try {
     const url = new URL(src);
 
-    // 2. Obsługuj tylko zdjęcia z CDN Sanity
     if (url.hostname === "cdn.sanity.io") {
       url.searchParams.set("auto", "format");
       url.searchParams.set("fit", "max");
@@ -29,7 +26,6 @@ export default function sanityImageLoader({
 
     return src;
   } catch (e) {
-    // 3. Fallback dla błędnych adresów
     return src;
   }
 }

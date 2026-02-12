@@ -9,10 +9,8 @@ interface SliderProgressProps {
 export const SliderProgress = ({ total, current }: SliderProgressProps) => {
   return (
     <div className="relative flex items-center justify-between w-full max-w-[80%]">
-      {/* --- LINIA TŁA --- */}
       <div className="absolute top-1/2 left-[15px] right-[15px] h-[2px] -translate-y-1/2 bg-[#F0D68F] -z-10" />
 
-      {/* --- KROPKI --- */}
       {Array.from({ length: total }).map((_, index) => {
         const isActive = index === current;
 
@@ -28,9 +26,6 @@ export const SliderProgress = ({ total, current }: SliderProgressProps) => {
                 height: isActive ? 30 : 10,
                 backgroundColor: isActive ? "#BFA16D" : "#F0D68F",
               }}
-              // ZMIANA TUTAJ:
-              // stiffness: 300 -> 100 (mniejsza sztywność = wolniejszy ruch)
-              // damping: 20 (zostawiamy, żeby hamowanie było płynne)
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
               className="flex items-center justify-center rounded-full shadow-sm overflow-hidden"
             >
@@ -40,7 +35,6 @@ export const SliderProgress = ({ total, current }: SliderProgressProps) => {
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.5 }}
-                    // ZMIANA TUTAJ: duration 0.2 -> 0.4 (żeby tekst też wchodził wolniej)
                     transition={{ duration: 0.4 }}
                     className="text-[15px] font-medium text-white"
                   >

@@ -20,7 +20,7 @@ export const CalendarVariant1 = ({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [showLeftGradient, setShowLeftGradient] = useState(false);
 
-  // --- 1. STABILNA OŚ CZASU (36 miesięcy w przód) ---
+
   const timeline = useMemo(() => {
     const now = new Date();
     const startMonthIdx = now.getMonth();
@@ -43,7 +43,7 @@ export const CalendarVariant1 = ({
     });
   }, []);
 
-  // --- 2. LOGIKA SCROLLA I GRADIENTU ---
+
   useEffect(() => {
     const container = scrollContainerRef.current;
     const handleScroll = () => {
@@ -75,23 +75,21 @@ export const CalendarVariant1 = ({
     }
   }, [selectedMonth, selectedYear]);
 
-  // --- 3. HANDLERY ---
+
   const handleMonthClick = (val: string, year: number) => {
     if (year !== selectedYear) onYearChange(year);
     onMonthSelect(val);
   };
 
   const handleShowAll = () => {
-    // Przekazujemy 0 lub null do onYearChange, aby nadrzędny komponent wiedział,
-    // że ma wyświetlić WSZYSTKIE lata. Jeśli Twój backend/logika wymaga konkretnej wartości,
-    // zmień 0 na null.
+ 
     onYearChange(0);
     onMonthSelect("ALL");
   };
 
   const currentYear = new Date().getFullYear();
   const handlePrevYear = () => {
-    // Jeśli selectedYear jest 0 (tryb "Wszystkie"), przywracamy obecny rok
+ 
     const baseYear = selectedYear === 0 ? currentYear : selectedYear;
     if (baseYear > currentYear) onYearChange(baseYear - 1);
   };
@@ -109,7 +107,7 @@ export const CalendarVariant1 = ({
 
   return (
     <div className="w-full flex flex-col gap-6 font-montserrat select-none max-[487px]:gap-6">
-      {/* --- HEADER --- */}
+    
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pl-2 pr-4 max-[487px]:gap-6">
         <div className="flex items-center justify-between w-full md:w-auto">
           <motion.div
@@ -208,7 +206,7 @@ export const CalendarVariant1 = ({
         </div>
       </div>
 
-      {/* --- OŚ CZASU --- */}
+   
       <div className="relative w-full">
         <AnimatePresence>
           {showLeftGradient && (

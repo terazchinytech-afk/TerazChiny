@@ -1,7 +1,5 @@
-// lib/api.ts
 import { client } from "./sanity";
 
-// 1. DANE DLA STRONY GŁÓWNEJ (LANDING PAGE)
 export async function getLandingPageData() {
   const query = `
     *[_type == "landingPage"][0] {
@@ -40,6 +38,22 @@ export async function getLandingPageData() {
             spotsLeft,
             "mainImage": mainImage.asset->url
           }
+        }
+      },
+      processSection {
+        ...
+      },
+      gallerySection {
+        title,
+        description,
+        ctaText,
+        selectedImages[] {
+          "id": reference, // Oryginalny ciąg znaków jako ID
+          "tag": tag,      // Rok przypisany w pickerze
+          
+          // Magia GROQ: Rozbijamy string "yearId::imageKey" i pobieramy konkretny obiekt
+          "url": *[_type == "galleryYear" && _id == string::split(^.reference, "::")[0]][0].images[_key == string::split(^.reference, "::")[1]][0].asset->url,
+          "alt": *[_type == "galleryYear" && _id == string::split(^.reference, "::")[0]][0].images[_key == string::split(^.reference, "::")[1]][0].alt
         }
       },
       testimonialsSection {
@@ -93,8 +107,6 @@ export async function getLandingPageData() {
 
   const data = await client.fetch(query);
 
-  // LOGIKA AUTOMATYCZNYCH POSTÓW:
-  // Jeśli tryb jest ustawiony na "latest" lub brak ustawień, dociągamy posty
   if (
     data?.blogSection?.postsSettings?.mode === "automatic_latest" ||
     !data?.blogSection?.postsSettings
@@ -117,7 +129,6 @@ export async function getLandingPageData() {
   return data;
 }
 
-// 2. DANE DLA STRONY KALENDARZ
 export async function getCalendarPageData() {
   const query = `
     *[_type == "calendarPage"][0] {
@@ -146,7 +157,6 @@ export async function getCalendarPageData() {
   return client.fetch(query);
 }
 
-// 3. WSZYSTKIE WYPRAWY
 export async function getAllTrips() {
   const query = `
     *[_type == "trip"] | order(date asc) {
@@ -165,7 +175,6 @@ export async function getAllTrips() {
   return client.fetch(query);
 }
 
-// 4. POBIERZ WYPRAWĘ PO SLUGU
 export async function getTripBySlug(slug: string) {
   const query = `
     *[_type == "trip" && slug.current == $slug][0] {
@@ -192,7 +201,6 @@ export async function getTripBySlug(slug: string) {
   return client.fetch(query, { slug });
 }
 
-// 5. BLOG - LISTA POSTÓW
 export async function getAllPosts() {
   const query = `
     *[_type == "post"] | order(publishedAt desc) {
@@ -209,7 +217,6 @@ export async function getAllPosts() {
   return client.fetch(query);
 }
 
-// 6. POJEDYNCZY POST
 export async function getPostBySlug(slug: string) {
   const query = `
     *[_type == "post" && slug.current == $slug][0] {
@@ -232,7 +239,6 @@ export async function getPostBySlug(slug: string) {
   return client.fetch(query, { slug });
 }
 
-// 7. REKOMENDACJE (Wykluczamy obecny post)
 export async function getRecommendedPosts(currentSlug: string) {
   const query = `
     *[_type == "post" && slug.current != $currentSlug] | order(publishedAt desc)[0...3] {
@@ -259,6 +265,23 @@ export async function getFooterData() {
         facebook,
         instagram,
         youtube
+      }
+    }
+  `;
+  return client.fetch(query);
+}
+
+// sanity/lib/queries.ts (lub inny plik z API)
+
+export async function getGalleryData() {
+  const query = `
+    *[_type == "galleryYear"] | order(year desc) {
+      year,
+      images[] {
+        "id": _key,
+        "url": asset->url,
+        "alt": alt,
+        "date": date
       }
     }
   `;

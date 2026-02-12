@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
-// --- TYPY DANYCH ---
 interface FaqItem {
   question: string;
   answer: string;
@@ -35,7 +34,6 @@ export const FaqSection = ({ data }: FaqSectionProps) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  // Optymalizacja parsowania tytułu (Memoizacja)
   const titleParts = useMemo(
     () =>
       header.mainText.split(new RegExp(`(${header.highlightedText})`, "gi")),
@@ -52,11 +50,9 @@ export const FaqSection = ({ data }: FaqSectionProps) => {
 
   return (
     <section className="w-full bg-[#F8F8F6] relative overflow-hidden py-32">
-      {/* Optymalizacja tła - szum generowany przez CSS/Overlay dla wydajności */}
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none z-0 bg-repeat bg-[url('/noise.png')]" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-5xl">
-        {/* --- NAGŁÓWEK SEKCYJNY --- */}
         <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
             {header.badge && (
@@ -94,7 +90,6 @@ export const FaqSection = ({ data }: FaqSectionProps) => {
           </Link>
         </div>
 
-        {/* --- LISTA FAQ (Zoptymalizowana pod kątem CLS) --- */}
         <div className="flex flex-col gap-2">
           {items.map((faq, index) => {
             const isOpen = openIndex === index;

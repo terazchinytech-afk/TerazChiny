@@ -5,7 +5,7 @@ import { ShieldCheck, Calendar } from "lucide-react";
 
 interface TripBookingCardProps {
   price: string;
-  bookingUrl?: string; // Link zewnętrzny z Sanity
+  bookingUrl?: string;
   tripTitle: string;
   tripSlug: string;
 }
@@ -24,7 +24,6 @@ export const TripBookingCard = ({
   const pln = parts[0].trim();
   const usd = parts[1] ? parts[1].trim() : null;
 
-  // 1. Definiujemy wewnętrzną ścieżkę (zawsze ją mamy)
   const internalBookingPath = {
     pathname: "/rezerwacja",
     query: {
@@ -33,8 +32,6 @@ export const TripBookingCard = ({
     },
   };
 
-  // 2. KLUCZOWA ZMIANA: Przycisk jest aktywny, jeśli mamy link z Sanity
-  // LUB jeśli mamy slug (czyli możemy wysłać do /rezerwacja)
   const finalHref = bookingUrl || internalBookingPath;
   const isAvailable = Boolean(bookingUrl || tripSlug);
 
@@ -75,7 +72,6 @@ export const TripBookingCard = ({
         </div>
 
         {isAvailable ? (
-          /* AKTYWNY PRZYCISK - Teraz zadziała, bo isAvailable to true */
           <Link
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             href={finalHref as any}
@@ -84,7 +80,6 @@ export const TripBookingCard = ({
             Zarezerwuj miejsce
           </Link>
         ) : (
-          /* ZABLOKOWANY PRZYCISK - Tylko jeśli nie ma ani linku, ani sluga */
           <div className="block w-full py-5 bg-gray-400 text-white rounded-2xl font-black uppercase tracking-widest text-center grayscale opacity-50 cursor-not-allowed">
             Rezerwacja wkrótce
           </div>

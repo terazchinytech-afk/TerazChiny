@@ -16,7 +16,6 @@ import {
 
 // --- HELPERY OPTYMALIZACYJNE (LOGICZNE) ---
 
-// Funkcja zapobiega błędom 500/Timeout poprzez ograniczenie rozmiaru wejściowego z Sanity
 const getOptimizedImageUrl = (url: string, width = 600) => {
   if (!url || url.startsWith("/")) return url;
   try {
@@ -79,7 +78,6 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
 
   return (
     <section className="px-8 max-[1024px]:px-4 rounded-[5rem] max-[640px]:rounded-[2.5rem] mx-4 relative overflow-hidden bg-[#b32a2e] py-32 landing-spacing">
-      {/* Optymalizacja tła - pointer-events-none dla lepszej wydajności przewijania */}
       <div
         className="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay"
         style={{
@@ -89,7 +87,6 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
       />
 
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col gap-16">
-        {/* --- NAGŁÓWEK --- */}
         <div className="flex flex-row  justify-between items-end max-[900px]:items-start mb-16 gap-8  max-[720px]:text-center  max-[720px]:self-center">
           <div>
             {header.subtitle && (
@@ -126,7 +123,6 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
           </Link>
         </div>
 
-        {/* --- TREŚĆ: LISTA LUB PLACEHOLDER --- */}
         {!hasPosts ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -164,7 +160,7 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
                   className="group w-[calc(33.333%-2.5rem)] max-[1024px]:w-[calc(50%-2.5rem)] max-[640px]:w-full"
                 >
                   <Link
-                    href={`/blog/${post.slug?.current}`}
+                    href={`/blog/${post.slug}`}
                     className="block h-full flex flex-col"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden rounded-[2.5rem] max-[640px]:rounded-[1.5rem] mb-8 shadow-2xl transition-all duration-700 group-hover:rounded-[1rem]">
@@ -242,7 +238,6 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
         </Link>
       </div>
 
-      {/* Optymalizacja dekoracji - SVG ładowane leniwie */}
       <Image
         src="/smok.svg"
         width={600}

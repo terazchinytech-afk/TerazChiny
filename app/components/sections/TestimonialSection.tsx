@@ -23,8 +23,11 @@ const getOptimizedImageUrl = (url: string, width = 600) => {
 
 // Memoizowane tło, aby nie obciążać procesora przy zmianie slajdów
 const FloatingParticles = memo(() => {
-  const particles = useMemo(() => {
-    return [...Array(6)].map((_, i) => ({
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Generowanie cząsteczek tylko po stronie klienta, aby uniknąć błędu hydracji
+    const generatedParticles = [...Array(6)].map((_, i) => ({
       id: i,
       size: Math.random() * 15 + 5,
       left: Math.random() * 100,
@@ -32,6 +35,7 @@ const FloatingParticles = memo(() => {
       randomX: Math.random() * 30 - 15,
       duration: Math.random() * 10 + 15,
     }));
+    setParticles(generatedParticles);
   }, []);
 
   return (
@@ -183,7 +187,7 @@ export const TestimonialsSection = ({ data }: any) => {
                     filter: position === 0 ? "none" : "blur(2px)",
                   }}
                   transition={{ type: "spring", stiffness: 150, damping: 25 }}
-                  className="absolute w-full max-w-[310px] cursor-pointer will-change-transform"
+                  className="absolute w-full max-w-[310px] cursor-pointer pointer-cursor will-change-transform"
                   style={{
                     zIndex: 10 - Math.round(absPosition),
                     transformStyle: "preserve-3d",
@@ -240,7 +244,7 @@ export const TestimonialsSection = ({ data }: any) => {
           <div className="flex items-center gap-10">
             <button
               onClick={handlePrev}
-              className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
+              className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer pointer-cursor"
             >
               <ChevronLeft size={24} className="text-white hover:text-gold" />
             </button>
@@ -249,13 +253,13 @@ export const TestimonialsSection = ({ data }: any) => {
                 <button
                   key={i}
                   onClick={() => setActiveIndex(i)}
-                  className={`h-1.5 transition-all duration-500 rounded-full ${i === activeIndex ? "w-10 bg-gold" : "w-2 bg-white/20"}`}
+                  className={`h-1.5 transition-all duration-500 rounded-full pointer-cursor ${i === activeIndex ? "w-10 bg-gold" : "w-2 bg-white/20"}`}
                 />
               ))}
             </div>
             <button
               onClick={handleNext}
-              className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
+              className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer pointer-cursor"
             >
               <ChevronRight size={24} className="text-white hover:text-gold" />
             </button>

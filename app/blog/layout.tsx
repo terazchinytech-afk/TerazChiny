@@ -11,7 +11,7 @@ export default async function RootLayout({
   return (
     <>
       <NavBar />
-      {/* Min-h-screen zapewnia, że stopka nie "skacze" na krótkich stronach */}
+
       <main className="min-h-screen">{children}</main>
       <Footer data={footerData} />
     </>

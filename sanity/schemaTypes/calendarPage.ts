@@ -12,7 +12,6 @@ export const calendarPage = defineType({
     { name: "seo", title: "SEO / Meta", icon: Search },
   ],
   fields: [
-    // --- 1. SEKCJA HERO ---
     defineField({
       name: "heroSection",
       title: "Sekcja Hero",
@@ -52,8 +51,6 @@ export const calendarPage = defineType({
       ],
     }),
 
-    // --- 2. SEKCJA KARTY FILTRÓW ---
-    // USUNĄŁEM pole 'regions' - reszta tekstów zostaje, bo warto je móc edytować
     defineField({
       name: "filterSection",
       title: "Teksty na Karcie Wyszukiwania",
@@ -93,7 +90,6 @@ export const calendarPage = defineType({
       ],
     }),
 
-    // --- 3. SEO ---
     defineField({
       name: "seo",
       title: "Ustawienia SEO",

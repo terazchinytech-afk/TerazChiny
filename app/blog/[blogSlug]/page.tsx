@@ -12,7 +12,7 @@ interface Props {
 
 // --- DYNAMICZNE METADANE ---
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { blogSlug } = await params; // Obsługa asynchronicznych params
+  const { blogSlug } = await params;
   const post = await getPostBySlug(blogSlug);
 
   if (!post) return { title: "Nie znaleziono artykułu" };
@@ -33,7 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
   const { blogSlug } = await params;
 
-  // Pobieramy post oraz rekomendacje jednocześnie
   const [postData, recommendedData] = await Promise.all([
     getPostBySlug(blogSlug),
     getRecommendedPosts(blogSlug),

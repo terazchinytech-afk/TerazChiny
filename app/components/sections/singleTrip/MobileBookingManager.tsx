@@ -10,8 +10,6 @@ interface MobileBookingManagerProps {
   tripTitle: string;
 }
 
-// --- 1. KOMPONENTY POMOCNICZE WYNIESIONE POZA GŁÓWNY KOMPONENT ---
-
 const ButtonContent = () => (
   <span className="font-bold text-sm">Zarezerwuj teraz</span>
 );
@@ -27,7 +25,6 @@ const BookingButton = ({
   tripTitle,
   className,
 }: BookingButtonProps) => {
-  // Klasy bazowe: w-fit, px-8, wyśrodkowanie
   const classes = `bg-[#b32a2e] text-white flex items-center justify-center py-3 px-8 rounded-xl shadow-lg shadow-red-900/20 active:scale-95 transition-transform w-fit ${className || ""}`;
 
   if (bookingUrl) {
@@ -51,8 +48,6 @@ const BookingButton = ({
     </Link>
   );
 };
-
-// --- 2. GŁÓWNY KOMPONENT ---
 
 export const MobileBookingManager = ({
   price,
@@ -80,12 +75,10 @@ export const MobileBookingManager = ({
 
   return (
     <>
-      {/* 1. KARTA STATYCZNA (Widoczna na górze mobile) */}
       <div
         className="lg:hidden mb-8 bg-white border border-gray-100 rounded-3xl shadow-sm 
         p-6 max-[650px]:p-5 max-[650px]:text-center max-[1024px]:relative max-[1024px]:-top-20 max-[1024px]:-mb-8"
       >
-        {/* Górna sekcja: Cena i Status */}
         <div className="flex justify-between items-start mb-4 max-[650px]:justify-center">
           <div className="flex flex-col max-[650px]:items-center">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
@@ -99,7 +92,6 @@ export const MobileBookingManager = ({
             </div>
           </div>
 
-          {/* Status dostępności - UKRYTY poniżej 650px */}
           <div className="flex items-center gap-1.5 bg-green-50 px-3 py-1.5 rounded-full border border-green-100 max-[650px]:hidden">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             <span className="text-[10px] font-bold text-green-700 uppercase tracking-wide">
@@ -108,7 +100,6 @@ export const MobileBookingManager = ({
           </div>
         </div>
 
-        {/* Atuty w skrócie */}
         <div className="space-y-2 mb-6 max-[650px]:flex max-[650px]:flex-col max-[650px]:items-center">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <CheckCircle2 size={16} className="text-[#b32a2e]" />
@@ -120,7 +111,6 @@ export const MobileBookingManager = ({
           </div>
         </div>
 
-        {/* Trigger dla Observera */}
         <div ref={triggerRef} className="flex justify-center w-full">
           <BookingButton
             bookingUrl={bookingUrl}
@@ -133,14 +123,12 @@ export const MobileBookingManager = ({
         </p>
       </div>
 
-      {/* 2. STICKY BAR (Pojawia się po przewinięciu) */}
       <div
         className={`fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)] pb-safe transition-transform duration-300 ease-in-out ${
           showStickyBar ? "translate-y-0" : "translate-y-[120%]"
         }`}
       >
         <div className="flex items-center justify-center">
-          {/* Wrapper Buttona */}
           <div className="w-auto">
             <BookingButton bookingUrl={bookingUrl} tripTitle={tripTitle} />
           </div>

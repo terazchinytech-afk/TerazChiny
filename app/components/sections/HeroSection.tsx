@@ -178,7 +178,6 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
   const [showInfoOverlay, setShowInfoOverlay] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  // --- MERGE DANYCH (ZACHOWANA LOGIKA) ---
   const currentSlide = useMemo(() => {
     const staticSlide = STATIC_LAYOUT[currentIndex];
     const sanitySlide = data?.slides?.[currentIndex];
@@ -233,7 +232,6 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
         <NavBar />
       </div>
 
-      {/* --- WARSTWA TREŚCI (GRID) --- */}
       <div className="container relative z-20 grid h-208.75 grid-cols-[5fr_4fr] pointer-events-none max-[900px]:flex max-[900px]:flex-col max-[900px]:h-auto">
         <div className="flex h-full items-center justify-center pointer-events-auto ml-6 max-[900px]:ml-0 max-[900px]:h-157.5">
           <div className="flex flex-col gap-4 -mt-40 max-[900px]:mt-0 max-[900px]:items-center max-[900px]:text-center">
@@ -386,7 +384,6 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
         </div>
       </div>
 
-      {/* --- WARSTWA TŁA (OPTYMALIZACJA LCP - LAYOUT NIETKNIĘTY) --- */}
       <div className="absolute top-0 -z-10 grid h-208.75 w-screen grid-cols-[5fr_4fr] overflow-hidden max-[900px]:flex max-[900px]:flex-col max-[900px]:h-auto">
         <div className="relative z-20 h-full w-full bg-brand-red max-[900px]:h-157.5">
           <Image

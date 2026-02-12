@@ -6,8 +6,6 @@ import {
   Clock,
   MapPin,
   ChevronRight,
-  Users,
-  CheckCircle,
   AlertCircle,
 } from "lucide-react";
 
@@ -33,7 +31,6 @@ export const TripListItem = ({
   trip: Trip;
   index: number;
 }) => {
-  // Status logic (kolorki i ikonki)
   const isAvailable = trip.spots === "available";
   const isLastSpots = trip.spots === "last_spots";
   const isSoldOut = trip.spots === "sold_out";
@@ -46,7 +43,6 @@ export const TripListItem = ({
       transition={{ delay: index * 0.1, duration: 0.5 }}
       className="group relative bg-white rounded-[32px] p-4 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 border border-gray-100 transition-all duration-300 flex flex-col md:flex-row gap-6"
     >
-      {/* --- CZĘŚĆ 1: ZDJĘCIE I DATA --- */}
       <div className="relative w-full md:w-64 h-56 md:h-auto shrink-0">
         <div className="relative w-full h-full rounded-[24px] overflow-hidden">
           <Image
@@ -58,7 +54,6 @@ export const TripListItem = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
 
-        {/* Badge Daty - Unosi się nad zdjęciem */}
         <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-lg text-center min-w-[70px]">
           <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest">
             {trip.month}
@@ -69,9 +64,7 @@ export const TripListItem = ({
         </div>
       </div>
 
-      {/* --- CZĘŚĆ 2: TREŚĆ --- */}
       <div className="flex-grow flex flex-col justify-center py-2">
-        {/* Górna linia: Region i Status */}
         <div className="flex flex-wrap items-center gap-3 mb-3">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold uppercase tracking-wide">
             <MapPin size={12} /> {trip.region}
@@ -109,7 +102,6 @@ export const TripListItem = ({
         </p>
       </div>
 
-      {/* --- CZĘŚĆ 3: CENA I CTA (Prawa strona / Dół na mobile) --- */}
       <div className="md:w-56 md:border-l border-gray-100 md:pl-6 flex flex-col justify-center items-start md:items-end gap-4 py-2">
         <div className="text-left md:text-right">
           <p className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">

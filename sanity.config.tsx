@@ -9,6 +9,7 @@ import { structure } from "./sanity/structure";
 import { plPLLocale } from "@sanity/locale-pl-pl";
 import React from "react";
 import Image from "next/image";
+import { WebPCompressor } from "./sanity/components/WebPCompressor";
 
 const props = {
   "--bg": "#121212",
@@ -18,7 +19,6 @@ const props = {
   "--pure-white": "#ffffff",
 };
 
-// ... (Twoja konfiguracja myTheme bez zmian) ...
 const myTheme = buildLegacyTheme({
   "--black": props["--bg"],
   "--white": props["--text"],
@@ -31,7 +31,6 @@ const myTheme = buildLegacyTheme({
   "--state-info-color": props["--pure-white"],
 });
 
-// 1. Definiujemy komponent dla małej IKONY (zamiast "PT")
 const StudioIcon = () => (
   <Image
     src="/LogoRedBG.png"
@@ -48,7 +47,6 @@ export default defineConfig({
   dataset,
   title: "Panel Teraz Chiny",
 
-  // 2. TUTAJ podmieniamy "PT" na Twoją ikonę
   icon: StudioIcon,
 
   theme: {
@@ -67,7 +65,6 @@ export default defineConfig({
             style: { display: "flex", alignItems: "center", gap: "10px" },
           },
           [
-            // Styl globalny dla naprawy kolorów
             React.createElement(
               "style",
               { key: "v4-fix" },
@@ -81,10 +78,10 @@ export default defineConfig({
             }
           `,
             ),
-            // Pełne logo w pasku nawigacji
+
             React.createElement("img", {
               key: "logo-img",
-              src: "/logo.svg", // Upewnij się, że używasz tutaj tego samego pliku co w ikonie
+              src: "/logo.svg",
               alt: "Teraz Chiny",
               style: { height: "25px", objectFit: "contain" },
             }),
@@ -97,14 +94,31 @@ export default defineConfig({
     plPLLocale(),
     structureTool({
       structure,
-      title: "Struktura", // Tutaj zmieniamy nazwę "Structure" na polską
+      title: "Struktura",
     }),
 
     visionTool({
       defaultApiVersion: apiVersion,
-      title: "Eksplorator API", // "Vision" to narzędzie dla deweloperów, "Eksplorator API" brzmi profesjonalnie
+      title: "Eksplorator API",
     }),
   ],
-
+  form: {
+    image: {
+      assetSources: (previousAssetSources) => {
+        // Dodajemy nasze źródło na początek listy
+        return [
+          {
+            name: "webp-compressor",
+            title: "Skompresuj (WebP)",
+            component: WebPCompressor,
+            icon: () => (
+              <span style={{ fontWeight: "bold", color: "green" }}>WebP</span>
+            ), // Lub jakaś ikona
+          },
+          ...previousAssetSources, // Zachowujemy standardowe "Upload" i "Unsplash"
+        ];
+      },
+    },
+  },
   schema,
 });

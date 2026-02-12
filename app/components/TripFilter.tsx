@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/TripFilter.tsx
+
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -12,8 +12,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-// ... (Kod CustomSelect BEZ ZMIAN) ...
-// (Zakładam, że wiesz gdzie go wkleić - tak jak w poprzednich wersjach)
 interface Option {
   label: string;
   value: string;
@@ -32,8 +30,6 @@ const CustomSelect = ({
   options,
   onChange,
 }: CustomSelectProps) => {
-  // ... (Logika CustomSelect bez zmian) ...
-  // (Skrót dla czytelności - użyj pełnego kodu z poprzedniej odpowiedzi)
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const selectedLabel =
@@ -100,13 +96,12 @@ const CustomSelect = ({
   );
 };
 
-// --- GŁÓWNY KOMPONENT ---
 interface TripFilterProps {
   selectedRegion: string;
   onRegionChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onSearchClick: () => void;
   labels?: any;
-  availableRegions?: string[]; // <-- Nowy prop
+  availableRegions?: string[];
 }
 
 export const TripFilter = ({
@@ -114,7 +109,7 @@ export const TripFilter = ({
   onRegionChange,
   onSearchClick,
   labels,
-  availableRegions = [], // Domyślnie pusta tablica
+  availableRegions = [],
 }: TripFilterProps) => {
   const handleRegionSelect = (val: string) => {
     const syntheticEvent = {
@@ -123,25 +118,14 @@ export const TripFilter = ({
     onRegionChange(syntheticEvent);
   };
 
-  // 1. Budujemy opcje dynamicznie na podstawie unikalnych regionów z bazy
   const defaultRegion = { label: "Całe Chiny", value: "Wszystkie regiony" };
 
-  // Mapujemy stringi regionów na obiekty {label, value}
   const dynamicRegions = availableRegions.map((region) => ({
     label: region,
     value: region,
   }));
 
   const regionOptions = [defaultRegion, ...dynamicRegions];
-
-  const dateOptions = [
-    { label: "Najbliższy termin", value: "Najbliższy termin" },
-    { label: "Wiosna 2025", value: "Wiosna 2025" },
-    { label: "Jesień 2025", value: "Jesień 2025" },
-    { label: "Lato 2026", value: "Lato 2026" },
-  ];
-
-  const [date, setDate] = useState(dateOptions[0].value);
 
   return (
     <motion.div
