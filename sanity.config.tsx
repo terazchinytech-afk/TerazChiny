@@ -1,3 +1,4 @@
+/* Section: Studio Configuration */
 "use client";
 
 import { visionTool } from "@sanity/vision";
@@ -46,15 +47,12 @@ export default defineConfig({
   projectId,
   dataset,
   title: "Panel Teraz Chiny",
-
   icon: StudioIcon,
 
-  theme: {
-    ...myTheme,
-    "--s-color-text-button-primary": props["--pure-white"],
-    "--s-color-text-accent": props["--pure-white"],
-    "--s-color-icon-accent": props["--pure-white"],
-  },
+  /* Section: Theme Fix */
+  // Usunięto nieznane właściwości --s-color-..., które wywoływały błędy TS.
+  // Zostawiamy tylko obiekt myTheme wygenerowany przez buildLegacyTheme.
+  theme: myTheme,
 
   studio: {
     components: {
@@ -65,6 +63,8 @@ export default defineConfig({
             style: { display: "flex", alignItems: "center", gap: "10px" },
           },
           [
+            /* Section: Global CSS Overrides */
+            // Przenosimy style tekstów przycisków tutaj, aby uniknąć błędów w obiekcie theme
             React.createElement(
               "style",
               { key: "v4-fix" },
@@ -75,6 +75,11 @@ export default defineConfig({
             }
             [data-selected="true"] {
               background-color: ${props["--brand"]} !important;
+            }
+            /* Dodatkowe style dla przycisków, których brakowało w theme */
+            button[data-appearance="default"][data-color="primary"] {
+                --card-bg-color: ${props["--brand"]};
+                --card-fg-color: ${props["--pure-white"]};
             }
           `,
             ),
@@ -102,23 +107,24 @@ export default defineConfig({
       title: "Eksplorator API",
     }),
   ],
+
+  /* Section: Global Component Registration */
   form: {
-    image: {
-      assetSources: (previousAssetSources) => {
-        // Dodajemy nasze źródło na początek listy
-        return [
-          {
-            name: "webp-compressor",
-            title: "Skompresuj (WebP)",
-            component: WebPCompressor,
-            icon: () => (
-              <span style={{ fontWeight: "bold", color: "green" }}>WebP</span>
-            ), // Lub jakaś ikona
-          },
-          ...previousAssetSources, // Zachowujemy standardowe "Upload" i "Unsplash"
-        ];
+    components: {
+      input: (props) => {
+        // Jeśli chcesz, aby WebPCompressor działał AUTOMATYCZNIE dla każdego pola typu 'image'
+        // we wszystkich Twoich schematach, odkomentuj poniższy kod:
+
+        /*
+        if (props.schemaType.name === 'image') {
+          return props.renderDefault(props); // Lub Twój komponent, jeśli ma obsługiwać wszystkie zdjęcia
+        }
+        */
+
+        return props.renderDefault(props);
       },
     },
   },
+
   schema,
 });
