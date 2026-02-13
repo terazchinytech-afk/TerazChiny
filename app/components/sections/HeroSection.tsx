@@ -288,8 +288,10 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                       fill
                       className="object-cover"
                       alt={currentSlide.subtitle}
-                      sizes="235px"
+                      quality={60}
+                      sizes="(max-width: 480px) 300px, 235px"
                       priority={currentIndex === 0}
+                      loading={currentIndex === 0 ? "eager" : "lazy"}
                     />
                     {!showInfoOverlay && (
                       <button
@@ -356,7 +358,11 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
                     height={currentSlide.imageSizes.height}
                     width={currentSlide.imageSizes.width}
                     className={`absolute ${currentSlide.position}`}
-                    alt="Decorative"
+                    alt=""
+                    fetchPriority="low"
+                    loading="eager"
+                    sizes="(max-width: 640px) 200px, 400px"
+                    quality={40}
                   />
                 )}
                 <Image

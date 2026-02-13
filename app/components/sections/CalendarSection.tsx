@@ -213,12 +213,13 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                         <div className="relative md:w-[160px] min-h-[140px] md:min-h-0 p-6 flex flex-row md:flex-col items-center justify-center gap-4 md:gap-1 text-center overflow-hidden">
                           {trip.mainImage && (
                             <Image
-                              src={getOptimizedImageUrl(trip.mainImage, 400)}
+                              src={trip.mainImage}
                               fill
                               className="object-cover transition-transform duration-700 group-hover:scale-110"
                               alt={trip.title}
-                              sizes="160px"
-                              priority={index === 0} // Kluczowe dla LCP
+                              sizes="(max-width: 768px) 100vw, 160px"
+                              priority={index === 0}
+                              quality={60}
                             />
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/60 z-10" />

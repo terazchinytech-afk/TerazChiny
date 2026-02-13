@@ -82,9 +82,10 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                   src={images.mainImage}
                   alt="Podróż do Chin"
                   fill
-                  className="object-cover border-[8px] lg:border-[12px] border-gold rounded-[29px] pointer-cursor hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover border-[12px] border-gold rounded-[29px] pointer-cursor hover:scale-105 transition-transform duration-700 max-[1024px]:border-[8px]"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 50vw"
                   priority
+                  quality={60}
                 />
               )}
             </div>
@@ -102,9 +103,10 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                     src={images.secondaryImage}
                     alt="Kultura Chin"
                     fill
-                    sizes="(max-width: 1024px) 40vw, 20vw"
+                    sizes="(max-width: 1024px) 50vw, 25vw"
                     className="object-cover pointer-cursor"
                     loading="lazy"
+                    quality={60}
                   />
                 )}
               </div>
@@ -198,6 +200,8 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                     fill
                     className="object-cover scale-105 pointer-cursor hover:scale-110 transition-transform duration-[1.5s]"
                     sizes="(max-width: 1024px) 100vw, 50vw"
+                    loading="lazy"
+                    quality={60}
                   />
                 )}
               </div>
