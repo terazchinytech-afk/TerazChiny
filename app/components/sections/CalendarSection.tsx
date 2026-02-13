@@ -108,10 +108,9 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
       ),
     [header.title.fullText, header.title.highlight],
   );
-  console.log(data);
 
   return (
-    <section className="w-full bg-gray-50 landing-spacing py-32">
+    <section className="w-full bg-gray-50 landing-spacing py-32 overflow-x-hidden">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 min-[1110px]:grid-cols-12 gap-12 min-[1110px]:gap-8">
           <div className="min-[1110px]:col-span-4 relative">
@@ -189,7 +188,6 @@ export const CalendarSection = ({ data }: CalendarSectionProps) => {
                 const StatusIcon = statusInfo.icon;
                 const isSoldOut = trip.status?.replace("-", "_") === "sold_out";
                 const dateObj = formatDate(trip.date);
-                console.log(trip.slug.current);
 
                 return (
                   <motion.div

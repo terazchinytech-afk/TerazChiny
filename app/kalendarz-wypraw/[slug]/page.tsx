@@ -86,7 +86,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const trip = await getTripBySlug(slug);
-
+  console.log("Trip from trip page", trip);
   if (!trip) return { title: "Wyprawa nie znaleziona" };
 
   const title = trip.seoTitle || `${trip.title} | Teraz Chiny`;

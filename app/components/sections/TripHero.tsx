@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ChevronLeft, MapPin, Sparkles } from "lucide-react";
+import { ChevronLeft, MapPin, Sparkles, TrendingUp } from "lucide-react"; // Dodałem ikonę TrendingUp opcjonalnie
 import { useRouter } from "next/navigation";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const TripHero = ({ trip }: { trip: any }) => {
   const router = useRouter();
 
   return (
     <section className="relative h-[70vh] min-h-[500px] w-full overflow-hidden bg-gray-900">
+      {/* ... (Tło i obrazek bez zmian) ... */}
       <motion.div
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
@@ -36,6 +37,7 @@ export const TripHero = ({ trip }: { trip: any }) => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="max-w-4xl"
           >
+            {/* ... (Przycisk powrotu i Badge sezonu bez zmian) ... */}
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <button
                 onClick={() => router.back()}
@@ -68,11 +70,15 @@ export const TripHero = ({ trip }: { trip: any }) => {
                 </span>
               </div>
 
-              <div className="flex -space-x-3">
-                <div className=" text-xs font-medium text-white/60 flex items-center italic">
-                  +12 osób zapisało się w tym tygodniu
+              {/* TU JEST ZMIANA: Wyświetlamy tylko jeśli pole istnieje */}
+              {trip.trendingText && (
+                <div className="flex -space-x-3">
+                  <div className="text-xs font-medium text-white/60 flex items-center italic">
+                    {/* Możesz tu dodać ikonkę jeśli chcesz, np. TrendingUp */}
+                    {trip.trendingText}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </motion.div>
         </div>

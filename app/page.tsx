@@ -59,7 +59,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Home() {
   const sanityData = await getLandingPageData();
-  console.log(sanityData.gallerySection);
 
   if (!sanityData) {
     return (

@@ -190,6 +190,7 @@ export async function getTripBySlug(slug: string) {
       content,
       highlights,
       faq,
+      trendingText,
       bookingUrl,
       "mainImage": mainImage.asset->url,
       seoTitle,

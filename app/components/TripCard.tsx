@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 export interface Trip {
+  region: string;
   slug: string;
   id: string;
   year: number;
@@ -65,7 +66,6 @@ const StatusBadge = ({ status }: { status: string }) => {
 export const TripCard = ({ trip, index }: TripCardProps) => {
   const isSoldOut = trip.spots === "sold_out";
   const DESC_LIMIT = 240;
-  console.log(trip);
 
   return (
     <motion.div
@@ -91,14 +91,19 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
             {trip.month}
           </span>
           <span className="block text-2xl font-black text-[#b32a2e] leading-none">
-            {trip.day}
+            {trip.dates}
           </span>
         </div>
       </div>
 
       <div className="flex flex-col flex-1 p-6 min-[1031px]:p-8 min-w-0">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-          <StatusBadge status={trip.spots} />
+          <div className="flex flex-col gap-2">
+            <StatusBadge status={trip.spots} />
+            <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white bg-brand-red px-3 py-1.5 rounded-full border border-gray-200">
+              {trip.region}
+            </div>
+          </div>
           <div className="flex items-center gap-4 text-xs font-medium text-gray-400">
             <span className="flex items-center gap-1.5">
               <Clock size={16} /> {trip.duration}
@@ -132,7 +137,7 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
             href={`/kalendarz-wypraw/${trip.slug}`}
             className="max-[550px]:ml-4 cursor-pointer"
           >
-            <button className="bg-[#b32a2e] cursor-pointer text-white px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
+            <button className="bg-[#b32a2e] cursor-pointer text-white cursor-pointer px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
               <span className="max-[380px]:hidden">Szczegóły</span>
               <ArrowRight
                 size={16}

@@ -121,11 +121,11 @@ export const TestimonialsSection = ({ data }: any) => {
 
   return (
     <section
-      className="w-full max-[767px]:py-16 bg-brand-red text-white relative z-10 overflow-hidden py-32 pb-6"
+      className="w-full max-[767px]:py-16 bg-brand-red text-white relative z-10  py-32 pb-6 overflow-x-hidden"
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.02] mix-blend-overlay -z-20 pointer-events-none" />
+      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.02] mix-blend-overlay -z-20 pointer-events-none " />
       <FloatingParticles />
 
       <div className="container mx-auto px-4 max-w-6xl relative">

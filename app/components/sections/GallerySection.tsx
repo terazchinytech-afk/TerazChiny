@@ -268,7 +268,7 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
       {/* --- BUTTON --- */}
       <div className="flex justify-center relative z-20">
         <Link
-          href={"/galeria"}
+          href={"/galeria-zdjec"}
           className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-brand-red px-10 py-4 font-bold text-white shadow-lg transition-shadow duration-300 hover:shadow-xl pointer-cursor"
         >
           <span className="font-montserrat text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:-translate-x-1">

@@ -62,7 +62,6 @@ export default async function CalendarPage() {
     getCalendarPageData(),
     getAllTrips(),
   ]);
-  console.log(rawTrips);
 
   // 1. Formatowanie wycieczek
   const formattedTrips: any = rawTrips.map((trip: any) => {

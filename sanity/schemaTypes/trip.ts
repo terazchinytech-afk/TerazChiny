@@ -57,6 +57,15 @@ export const trip = defineType({
       options: { dateFormat: "YYYY-MM-DD" },
       validation: (Rule) => Rule.required(),
     }),
+
+    defineField({
+      name: "trendingText",
+      title: "Tekst trendu (Social Proof)",
+      type: "string",
+      group: "details",
+      description:
+        "Tekst wyświetlany obok lokalizacji, np. '+12 osób zapisało się w tym tygodniu'. Jeśli zostawisz puste, sekcja się nie wyświetli.",
+    }),
     defineField({
       name: "duration",
       title: "Czas trwania",
