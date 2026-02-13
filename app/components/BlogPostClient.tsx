@@ -92,28 +92,28 @@ export const BlogPostClient = ({
   return (
     <main className="relative min-h-screen bg-[#b32a2e] pb-32 pt-12 overflow-hidden ">
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute top-20 -right-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
       />
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute bottom-20 -left-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
       />
       <Image
-        src={"/smok.svg"}
+        src={"/smok.webp"}
         width={300}
         height={110}
         className="absolute bottom-96 -right-20 "
         alt=""
       />
       <Image
-        src="/chmura.svg"
+        src="/chmura.webp"
         width={300}
         height={150}
         className="absolute top-96 -left-6 pointer-events-none z-10"

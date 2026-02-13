@@ -392,27 +392,28 @@ export const HeroSection = ({ data }: HeroSectionProps) => {
             className="scale-[1.01] rounded-br-[69px] object-cover"
             alt="Background"
             priority
+            quality={60}
             fetchPriority="high"
           />
         </div>
 
         <div className="relative h-full w-full overflow-hidden max-[900px]:h-[900px]">
           <Image
-            src="/chmura.svg"
+            src="/chmura.webp"
             width={300}
             height={150}
             className="absolute top-20 -left-20 pointer-events-none z-10"
             alt=""
           />
           <Image
-            src="/symbol.svg"
+            src="/symbol.webp"
             width={300}
             height={150}
             className="absolute -top-20 -right-20 pointer-events-none z-10 max-[1110px]:w-[250px]"
             alt=""
           />
           <Image
-            src="/symbol.svg"
+            src="/symbol.webp"
             width={300}
             height={150}
             className="absolute -bottom-20 -right-44 pointer-events-none z-10 max-[1220px]:hidden"

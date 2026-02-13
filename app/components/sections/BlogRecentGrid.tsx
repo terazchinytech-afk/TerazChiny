@@ -47,28 +47,28 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
   return (
     <section className="py-24 px-6 rounded-[5rem] max-[1024px]:rounded-[3rem] max-[640px]:rounded-[2rem] max-[640px]:px-4 my-8 -mb-24 mx-4 relative overflow-hidden bg-[#b32a2e]">
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute top-20 -right-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
       />
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute bottom-20 -left-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
       />
       <Image
-        src={"/smok.svg"}
+        src={"/smok.webp"}
         width={300}
         height={110}
         className="absolute bottom-110 -right-0 "
         alt=""
       />
       <Image
-        src="/chmura.svg"
+        src="/chmura.webp"
         width={300}
         height={150}
         className="absolute top-146 -left-6 pointer-events-none z-10"

@@ -145,28 +145,28 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
           {/* Elementy Dekoracyjne */}
           <div className="pointer-events-none">
             <Image
-              src="/symbol.svg"
+              src="/symbol.webp"
               width={300}
               height={150}
               className="absolute top-20 -right-6 z-10 max-[1220px]:hidden rotate-12"
               alt=""
             />
             <Image
-              src="/symbol.svg"
+              src="/symbol.webp"
               width={250}
               height={120}
               className="absolute bottom-20 -left-10 z-10 max-[1220px]:hidden -rotate-12"
               alt=""
             />
             <Image
-              src="/smok.svg"
+              src="/smok.webp"
               width={400}
               height={200}
               className="absolute bottom-0 right-0 z-0 translate-x-20 translate-y-10"
               alt=""
             />
             <Image
-              src="/chmura.svg"
+              src="/chmura.webp"
               width={300}
               height={150}
               className="absolute top-32 -left-12 z-10"

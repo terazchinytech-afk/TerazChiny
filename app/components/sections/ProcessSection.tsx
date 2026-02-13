@@ -49,28 +49,28 @@ export const ProcessSection = ({ data }: any) => {
     <section className="relative w-full bg-brand-red text-white py-32">
       <div className="container mx-auto px-4 relative z-10 pb-10">
         <Image
-          src="/symbol.svg"
+          src="/symbol.webp"
           width={300}
           height={150}
           className="absolute top-20 -right-6 pointer-events-none z-0 max-[1220px]:hidden"
           alt=""
         />
         <Image
-          src="/symbol.svg"
+          src="/symbol.webp"
           width={300}
           height={150}
           className="absolute bottom-20 -left-6 pointer-events-none z-0 max-[1220px]:hidden"
           alt=""
         />
         <Image
-          src="/chmura.svg"
+          src="/chmura.webp"
           width={300}
           height={150}
           className="absolute top-40 -left-6 pointer-events-none z-0 "
           alt=""
         />
         <Image
-          src="/smok.svg"
+          src="/smok.webp"
           width={300}
           height={110}
           className="absolute bottom-0 right-0 pointer-events-none z-0 max-[1024px]:-bottom-47 max-[1024px]:z-20 "

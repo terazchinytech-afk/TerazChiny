@@ -63,28 +63,28 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
       className="w-full px-4 md:px-6 bg-brand-red py-32 relative overflow-hidden max-[440px]:px-0"
     >
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute -bottom-20 -right-0 pointer-events-none z-10"
         alt=""
       />
       <Image
-        src="/symbol.svg"
+        src="/symbol.webp"
         width={300}
         height={150}
         className="absolute -top-20 -left-0 pointer-events-none z-10 max-[740px]:hidden"
         alt=""
       />
       <Image
-        src="/chmura.svg"
+        src="/chmura.webp"
         width={300}
         height={150}
         className="absolute top-5 right-20 pointer-events-none z-10"
         alt=""
       />
       <Image
-        src="/smok.svg"
+        src="/smok.webp"
         width={300}
         height={150}
         className="absolute bottom-44 left-20 pointer-events-none z-10"
