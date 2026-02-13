@@ -26,6 +26,7 @@ const AccordionItem = ({
       <button
         onClick={onClick}
         className="w-full py-6 flex items-center justify-between text-left group transition-all"
+        aria-label="Rozwiń odpowiedź"
       >
         <span
           className={`text-lg font-bold transition-colors ${isOpen ? "text-[#b32a2e]" : "text-gray-900 group-hover:text-[#b32a2e]"}`}

@@ -156,6 +156,7 @@ export const TripFilter = ({
       <button
         onClick={onSearchClick}
         className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-bold py-4 px-6 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 group text-sm"
+        aria-label="Szukaj wyprawy"
       >
         <span>{labels?.buttonText || "Szukaj Wyprawy"}</span>
         <ChevronRight

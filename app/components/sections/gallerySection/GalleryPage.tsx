@@ -192,6 +192,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
             {/* Filtry Lat - TERAZ DYNAMICZNE Z SANITY */}
             <div className="flex flex-wrap justify-center gap-3 mb-16">
               <button
+                aria-label="Wyświetl galerie z wszystkich lat"
                 onClick={() => handleYearChange("all")}
                 className={`px-6 py-2 rounded-full cursor-pointer text-sm font-bold uppercase tracking-wider transition-all border-2 ${
                   activeYear === "all"
@@ -203,6 +204,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
               </button>
               {availableYears.map((year) => (
                 <button
+                  aria-label={`Otwórz galerie z roku ${year}`}
                   key={year}
                   onClick={() => handleYearChange(year)}
                   className={`px-6 py-2 rounded-full text-sm cursor-pointer font-bold uppercase tracking-wider transition-all border-2 ${
@@ -284,6 +286,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
                 <button
                   onClick={handleLoadMore}
                   disabled={isLoadingMore}
+                  aria-label="Załaduj więcej zdjęć"
                   className="group flex items-center cursor-pointer gap-3 px-10 py-4 bg-white/10 text-white border border-white/20 rounded-full font-bold montserrat text-xs uppercase tracking-widest hover:bg-gold hover:text-brand-red hover:border-gold transition-all shadow-xl disabled:opacity-70 disabled:cursor-not-allowed pointer-cursor"
                 >
                   {isLoadingMore ? (
@@ -339,6 +342,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
                   e.stopPropagation();
                   setSelectedImage(null);
                 }}
+                aria-label="Zamknij"
               >
                 <X size={24} />
               </button>
@@ -347,6 +351,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
             {/* Przycisk Poprzednie */}
             <button
               className="absolute left-4 top-1/2 cursor-pointer -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all backdrop-blur-md max-md:hidden"
+              aria-label="Wróć do poprzedniego zdjęcia"
               onClick={(e) => {
                 e.stopPropagation();
                 const currentIndex = visibleImages.findIndex(
@@ -364,6 +369,7 @@ export default function GalleryPage({ initialData }: GalleryPageProps) {
             {/* Przycisk Następne */}
             <button
               className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white hover:text-black transition-all pointer-cursor backdrop-blur-md max-md:hidden"
+              aria-label="Przejdź do kolejnego zdjęcia"
               onClick={(e) => {
                 e.stopPropagation();
                 const currentIndex = visibleImages.findIndex(

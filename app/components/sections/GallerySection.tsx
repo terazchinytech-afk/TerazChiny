@@ -308,7 +308,10 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
                   </p>
                 </div>
               </div>
-              <button className="text-white/50 hover:text-white transition-colors bg-white/10 p-3 rounded-full backdrop-blur-md pointer-cursor">
+              <button
+                aria-label="Zamknij"
+                className="text-white/50 hover:text-white transition-colors bg-white/10 p-3 rounded-full backdrop-blur-md pointer-cursor"
+              >
                 <X size={24} />
               </button>
             </div>

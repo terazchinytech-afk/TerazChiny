@@ -97,6 +97,7 @@ export const BlogPostClient = ({
         height={150}
         className="absolute top-20 -right-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/symbol.webp"
@@ -104,6 +105,7 @@ export const BlogPostClient = ({
         height={150}
         className="absolute bottom-20 -left-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src={"/smok.webp"}
@@ -111,6 +113,7 @@ export const BlogPostClient = ({
         height={110}
         className="absolute bottom-96 -right-20 "
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/chmura.webp"
@@ -118,6 +121,7 @@ export const BlogPostClient = ({
         height={150}
         className="absolute top-96 -left-6 pointer-events-none z-10"
         alt=""
+        aria-hidden="true"
       />
       <div className="max-w-4xl mx-auto px-6 relative z-10 mt-24">
         <Link
@@ -158,17 +162,6 @@ export const BlogPostClient = ({
               <Clock size={18} className="text-gold" /> {post.readingTime}{" "}
               czytania
             </div>
-            <button
-              onClick={() =>
-                window.navigator.share?.({
-                  title: post.title,
-                  url: window.location.href,
-                })
-              }
-              className="ml-auto flex items-center gap-2 hover:text-gold transition-colors group"
-            >
-              <Share2 size={18} /> <span>Udostępnij</span>
-            </button>
           </div>
         </header>
 

@@ -50,8 +50,6 @@ export const FaqSection = ({ data }: FaqSectionProps) => {
 
   return (
     <section className="w-full bg-[#F8F8F6] relative overflow-hidden py-32">
-      <div className="absolute inset-0 opacity-[0.05] pointer-events-none z-0 bg-repeat bg-[url('/noise.png')]" />
-
       <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-5xl">
         <div className="mb-12 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="max-w-2xl">
@@ -111,6 +109,7 @@ export const FaqSection = ({ data }: FaqSectionProps) => {
                     onClick={() => toggleFaq(index)}
                     className="w-full flex items-start justify-between gap-6 text-left group py-8 focus:outline-none"
                     aria-expanded={isOpen}
+                    aria-label="Rozwiń odpowiedź"
                   >
                     <div className="flex items-center gap-6 md:gap-10">
                       <div

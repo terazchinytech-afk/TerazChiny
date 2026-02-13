@@ -147,7 +147,7 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                   )}
                 </h2>
               </div>
-              <div className="space-y-5 text-white/70 font-montserrat leading-relaxed text-sm sm:text-base text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
+              <div className="space-y-5 text-white font-montserrat leading-relaxed text-sm sm:text-base text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
                 {description?.map((p, idx) => (
                   <p key={idx}>{p}</p>
                 ))}
@@ -166,7 +166,7 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                     <span className="text-2xl sm:text-3xl font-black text-white italic leading-none">
                       {stat.value}
                     </span>
-                    <span className="text-[9px] sm:text-[10px] font-bold text-white/40 uppercase tracking-[2px] text-center lg:text-left">
+                    <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-[2px] text-center lg:text-left">
                       {stat.label}
                     </span>
                   </div>
@@ -243,7 +243,7 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                     ),
                   )}
                 </h2>
-                <p className="text-white/80 font-montserrat leading-loose text-sm sm:text-base max-w-2xl">
+                <p className="text-white font-montserrat leading-loose text-sm sm:text-base max-w-2xl">
                   {differentiation.longDescription}
                 </p>
               </div>
@@ -259,7 +259,7 @@ export const AboutSection = ({ data }: AboutSectionProps) => {
                   <h4 className="font-bold text-white uppercase text-xs sm:text-sm tracking-wider mb-2">
                     {differentiation.flexibilityTitle}
                   </h4>
-                  <p className="text-white/60 text-xs sm:text-sm leading-relaxed">
+                  <p className="text-white text-xs sm:text-sm leading-relaxed">
                     {differentiation.flexibilityDesc}
                   </p>
                 </div>

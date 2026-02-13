@@ -42,6 +42,7 @@ export const TripHero = ({ trip }: { trip: any }) => {
               <button
                 onClick={() => router.back()}
                 className="group flex items-center cursor-pointer gap-2 text-white/80 hover:text-white transition-all"
+                aria-label="Wróć do listy wszystkich wypraw"
               >
                 <div className="p-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 group-hover:bg-[#b32a2e] group-hover:border-[#b32a2e] transition-all">
                   <ChevronLeft size={18} />

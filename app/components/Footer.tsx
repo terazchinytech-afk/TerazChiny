@@ -99,6 +99,7 @@ export const Footer = ({ data }: FooterProps) => {
           <button
             onClick={scrollToTop}
             className="mt-6 flex items-center gap-2 bg-[#efd075] text-[#b32a2e] px-6 py-3 rounded-lg font-bold text-sm cursor-pointer hover:bg-white transition-colors duration-300 shadow-lg"
+            aria-label="Wróć do góry"
           >
             <ChevronUp size={18} />
             Wróć do góry
@@ -155,6 +156,7 @@ export const Footer = ({ data }: FooterProps) => {
             <button
               onClick={scrollToTop}
               className="mt-6 flex items-center gap-2 bg-[#efd075] text-[#b32a2e] px-6 py-3 rounded-lg font-bold text-sm hover:bg-white transition-colors duration-300 shadow-lg"
+              aria-label="Wróć do góry"
             >
               <ChevronUp size={18} />
               Wróć do góry
@@ -162,9 +164,9 @@ export const Footer = ({ data }: FooterProps) => {
           </div>
 
           <div className="flex flex-col md:pl-10 pt-4">
-            <h3 className="font-bold text-lg mb-6 max-[497px]:text-center">
+            <h5 className="font-bold text-lg mb-6 max-[497px]:text-center">
               Mapa Strony
-            </h3>
+            </h5>
             <ul className="flex flex-col gap-4 text-sm font-medium max-[497px]:text-center">
               {navLinks.map((link) => (
                 <li key={link.href}>

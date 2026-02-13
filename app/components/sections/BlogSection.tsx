@@ -78,14 +78,6 @@ export const BlogSection = ({ headerData, posts }: BlogSectionProps) => {
 
   return (
     <section className="px-8 max-[1024px]:px-4 rounded-[5rem] max-[640px]:rounded-[2.5rem] mx-4 relative overflow-hidden bg-[#b32a2e] py-32 landing-spacing">
-      <div
-        className="absolute inset-0 opacity-[0.07] pointer-events-none mix-blend-overlay"
-        style={{
-          backgroundImage: "url('/pattern.svg')",
-          backgroundSize: "400px",
-        }}
-      />
-
       <div className="max-w-7xl mx-auto relative z-10 flex flex-col gap-16">
         <div className="flex flex-row  justify-between items-end max-[900px]:items-start mb-16 gap-8  max-[720px]:text-center  max-[720px]:self-center">
           <div>

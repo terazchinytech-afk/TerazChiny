@@ -52,6 +52,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
         height={150}
         className="absolute top-20 -right-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/symbol.webp"
@@ -59,6 +60,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
         height={150}
         className="absolute bottom-20 -left-6 pointer-events-none z-10 max-[1220px]:hidden"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src={"/smok.webp"}
@@ -66,6 +68,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
         height={110}
         className="absolute bottom-110 -right-0 "
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/chmura.webp"
@@ -73,6 +76,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
         height={150}
         className="absolute top-146 -left-6 pointer-events-none z-10"
         alt=""
+        aria-hidden="true"
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -265,6 +269,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="p-3 max-[480px]:p-2 rounded-full bg-white/10 text-white disabled:opacity-20 hover:bg-gold hover:text-black transition-all shadow-lg"
+              aria-label={`Wróć do strony numer ${currentPage - 1}`}
             >
               <ChevronLeft size={20} />
             </button>
@@ -273,6 +278,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
                 <button
                   key={i}
                   onClick={() => handlePageChange(i + 1)}
+                  aria-label={`Przejdź do strony ${i + 1}`}
                   className={`w-12 h-12 max-[480px]:w-10 max-[480px]:h-10 rounded-full font-bold montserrat text-sm transition-all ${currentPage === i + 1 ? "bg-gold text-black shadow-xl scale-110" : "bg-white/10 text-white hover:bg-white/20"}`}
                 >
                   {i + 1}
@@ -283,6 +289,7 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="p-3 max-[480px]:p-2 rounded-full bg-white/10 text-white disabled:opacity-20 hover:bg-gold hover:text-black transition-all shadow-lg"
+              aria-label={`Przejdź do strony ${currentPage + 1}`}
             >
               <ChevronRight size={20} />
             </button>

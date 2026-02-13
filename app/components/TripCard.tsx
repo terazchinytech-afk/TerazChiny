@@ -137,7 +137,10 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
             href={`/kalendarz-wypraw/${trip.slug}`}
             className="max-[550px]:ml-4 cursor-pointer"
           >
-            <button className="bg-[#b32a2e] cursor-pointer text-white cursor-pointer px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95">
+            <button
+              aria-label="Przejdź do szczegółów"
+              className="bg-[#b32a2e] cursor-pointer text-white cursor-pointer px-6 py-3 rounded-xl font-bold text-sm flex items-center gap-2 max-[550px]:px-4 max-[550px]:py-2.5 max-[550px]:text-xs transition-all active:scale-95"
+            >
               <span className="max-[380px]:hidden">Szczegóły</span>
               <ArrowRight
                 size={16}
@@ -159,7 +162,10 @@ export const TripCard = ({ trip, index }: TripCardProps) => {
         </div>
 
         <Link href={`/kalendarz-wypraw/${trip.slug}`} className="w-full">
-          <button className="w-full py-4 rounded-2xl bg-[#b32a2e] text-white text-[11px] font-bold uppercase tracking-widest hover:bg-[#962326] transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md">
+          <button
+            aria-label="Przejdź do kalendarza wypraw"
+            className="w-full py-4 rounded-2xl bg-[#b32a2e] text-white text-[11px] font-bold uppercase tracking-widest hover:bg-[#962326] transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
+          >
             Szczegóły <ArrowRight size={14} />
           </button>
         </Link>

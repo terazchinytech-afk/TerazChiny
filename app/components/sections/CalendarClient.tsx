@@ -236,6 +236,7 @@ export default function CalendarClient({
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
+                aria-label={`Przejdź do strony ${page}`}
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   currentPage === page
                     ? "bg-brand-red text-white shadow-md scale-110"

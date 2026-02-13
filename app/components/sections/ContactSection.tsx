@@ -68,6 +68,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
         height={150}
         className="absolute -bottom-20 -right-0 pointer-events-none z-10"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/symbol.webp"
@@ -75,6 +76,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
         height={150}
         className="absolute -top-20 -left-0 pointer-events-none z-10 max-[740px]:hidden"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/chmura.webp"
@@ -82,6 +84,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
         height={150}
         className="absolute top-5 right-20 pointer-events-none z-10"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src="/smok.webp"
@@ -89,6 +92,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
         height={150}
         className="absolute bottom-44 left-20 pointer-events-none z-10"
         alt=""
+        aria-hidden="true"
       />
       <Image
         src={"/contactLine.svg"}
@@ -97,6 +101,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
         alt="Element dekoracyjny"
         className="absolute -top-0 left-0 pointer-events-none w-auto h-[110%] min-w-[1200px] object-cover"
         priority
+        aria-hidden="true"
       />
 
       <div className="container mx-auto max-w-7xl relative z-10 max-[440px]:max-w-full max-[440px]:w-full ps-0 pe-0">
@@ -108,6 +113,7 @@ export const ContactSection = ({ data }: ContactSectionProps) => {
             className="object-cover"
             sizes="(max-width: 1280px) 100vw, 1280px"
             priority
+            aria-hidden="true"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-transparent z-0" />
 

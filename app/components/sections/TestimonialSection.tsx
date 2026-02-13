@@ -125,7 +125,6 @@ export const TestimonialsSection = ({ data }: any) => {
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      <div className="absolute inset-0 bg-[url('/pattern.png')] opacity-[0.02] mix-blend-overlay -z-20 pointer-events-none " />
       <FloatingParticles />
 
       <div className="container mx-auto px-4 max-w-6xl relative">
@@ -245,6 +244,7 @@ export const TestimonialsSection = ({ data }: any) => {
             <button
               onClick={handlePrev}
               className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer pointer-cursor"
+              aria-label="Wróć do poprzedniego slajdu"
             >
               <ChevronLeft size={24} className="text-white hover:text-gold" />
             </button>
@@ -254,12 +254,14 @@ export const TestimonialsSection = ({ data }: any) => {
                   key={i}
                   onClick={() => setActiveIndex(i)}
                   className={`h-1.5 transition-all duration-500 rounded-full pointer-cursor ${i === activeIndex ? "w-10 bg-gold" : "w-2 bg-white/20"}`}
+                  aria-label="Przycisk"
                 />
               ))}
             </div>
             <button
               onClick={handleNext}
               className="p-3 rounded-full border border-white/10 hover:bg-white/5 transition-all cursor-pointer pointer-cursor"
+              aria-label="Przejdź do kolejnego slajdu"
             >
               <ChevronRight size={24} className="text-white hover:text-gold" />
             </button>

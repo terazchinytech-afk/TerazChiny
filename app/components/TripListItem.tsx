@@ -119,7 +119,10 @@ export const TripListItem = ({
           </div>
         </div>
 
-        <button className="w-full md:w-auto bg-gray-900 hover:bg-[#b32a2e] text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group/btn">
+        <button
+          aria-label="Przejdź do szczegółów wyprawy"
+          className="w-full md:w-auto bg-gray-900 hover:bg-[#b32a2e] text-white font-bold py-3 px-6 rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 group/btn"
+        >
           <span>Szczegóły</span>
           <ChevronRight
             size={16}
