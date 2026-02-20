@@ -199,7 +199,6 @@ export default async function TripDetailPage({ params }: PageProps) {
     dates,
     image: rawTrip.mainImage || "/placeholder.jpg",
   };
-  console.log(trip.content);
 
   return (
     <div className="min-h-screen bg-[#ffffff] pb-32 lg:pb-20 relative">
