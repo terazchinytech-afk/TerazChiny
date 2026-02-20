@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { MessageSquare } from "lucide-react";
+import { WebPCompressor } from "../components/WebPCompressor"; // <--- IMPORT
 
 export const review = defineType({
   name: "review",
@@ -42,14 +43,32 @@ export const review = defineType({
       type: "reference",
       to: [{ type: "trip" }],
     }),
+
+    // --- ZMODYFIKOWANE ZDJĘCIE OPINII ---
     defineField({
       name: "reviewImage",
       title: "Zdjęcie z wyprawy",
       type: "image",
-      options: { hotspot: true },
       description:
         "Wgraj zdjęcie uczestnika zrobione podczas wyjazdu. Jeśli nie dodasz zdjęcia, system użyje zdjęcia głównego danej wyprawy.",
+      options: {
+        hotspot: false, // Wyłączamy kadrowanie
+        // @ts-expect-error - custom option
+        hideModalUI: true, // Uproszczony widok
+      },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Tekst alternatywny (Alt)",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+      components: {
+        input: WebPCompressor,
+      },
     }),
+
     defineField({
       name: "date",
       title: "Data wystawienia",

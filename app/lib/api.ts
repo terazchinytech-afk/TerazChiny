@@ -195,6 +195,10 @@ export async function getTripBySlug(slug: string) {
       "mainImage": mainImage.asset->url,
       seoTitle,
       seoDescription,
+      gallery[] {
+        "url": asset->url,
+        "alt": alt
+      },
       seoKeywords,
       "ogImage": ogImage.asset->url
     }

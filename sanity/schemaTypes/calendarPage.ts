@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { Calendar, LayoutTemplate, Search, Filter } from "lucide-react";
+import { WebPCompressor } from "../components/WebPCompressor"; // <--- IMPORT
 
 export const calendarPage = defineType({
   name: "calendarPage",
@@ -42,11 +43,28 @@ export const calendarPage = defineType({
           type: "text",
           rows: 3,
         }),
+
+        // --- ZMODYFIKOWANE ZDJĘCIE W TLE ---
         defineField({
           name: "heroImage",
           title: "Zdjęcie w tle",
           type: "image",
-          options: { hotspot: true },
+          options: {
+            hotspot: false, // Wyłączamy kadrowanie
+            // @ts-expect-error - custom option
+            hideModalUI: true, // Uproszczony widok
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
         }),
       ],
     }),
@@ -108,7 +126,28 @@ export const calendarPage = defineType({
           type: "array",
           of: [{ type: "string" }],
         }),
-        defineField({ name: "ogImage", title: "Social Image", type: "image" }),
+
+        // --- ZMODYFIKOWANE SOCIAL IMAGE ---
+        defineField({
+          name: "ogImage",
+          title: "Social Image",
+          type: "image",
+          options: {
+            hotspot: false,
+            // @ts-expect-error - custom option
+            hideModalUI: true,
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
+        }),
       ],
     }),
   ],

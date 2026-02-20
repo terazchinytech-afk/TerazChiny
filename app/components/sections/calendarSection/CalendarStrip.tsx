@@ -3,12 +3,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { FormattedTrip } from "./CalendarConstants";
 import { MONTHS_BASE } from "./CalendarConstants";
-import { CalendarVariant1 } from "./CalendarVariant1";
+
 import { CalendarVariant2 } from "./CalendarVariant2";
-import { CalendarDebugPanel } from "./CalendarDebugPanel";
-import { CalendarVariant3 } from "./CalendarVariant3";
-import { CalendarVariant4 } from "./CalendarVariant4";
-import { CalendarVariant5 } from "./CalendarVariant5";
 
 interface CalendarStripContainerProps {
   selectedYear: number;
@@ -25,7 +21,6 @@ export const CalendarStrip = ({
   onMonthSelect,
   events,
 }: CalendarStripContainerProps) => {
-  const [activeVariant, setActiveVariant] = useState(1);
   const isInitialized = useRef(false);
 
   useEffect(() => {
@@ -64,62 +59,15 @@ export const CalendarStrip = ({
     <div className="w-full relative bg-transparent font-montserrat z-20">
       <div className="container mx-auto px-4 max-w-[1200px] py-6">
         <div className="animate-in fade-in duration-500">
-          {activeVariant === 1 && (
-            <CalendarVariant1
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onYearChange={onYearChange}
-              onMonthSelect={onMonthSelect}
-              events={events}
-            />
-          )}
-
-          {activeVariant === 2 && (
-            <CalendarVariant2
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onYearChange={onYearChange}
-              onMonthSelect={onMonthSelect}
-              events={events}
-            />
-          )}
-          {activeVariant === 3 && (
-            <CalendarVariant3
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onYearChange={onYearChange}
-              onMonthSelect={onMonthSelect}
-              events={events}
-            />
-          )}
-          {activeVariant === 4 && (
-            <CalendarVariant4
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onYearChange={onYearChange}
-              onMonthSelect={onMonthSelect}
-              events={events}
-            />
-          )}
-          {activeVariant === 5 && (
-            <CalendarVariant5
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onYearChange={onYearChange}
-              onMonthSelect={onMonthSelect}
-              events={events}
-            />
-          )}
+          <CalendarVariant2
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+            onYearChange={onYearChange}
+            onMonthSelect={onMonthSelect}
+            events={events}
+          />
         </div>
       </div>
-
-      <CalendarDebugPanel
-        activeVariant={activeVariant}
-        setActiveVariant={setActiveVariant}
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        eventCount={events.length}
-      />
 
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar {

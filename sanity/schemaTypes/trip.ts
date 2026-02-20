@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { Plane, HelpCircle } from "lucide-react";
+import { WebPCompressor } from "../components/WebPCompressor";
 
 export const trip = defineType({
   name: "trip",
@@ -104,15 +105,31 @@ export const trip = defineType({
         "Zewnętrzny link do formularza rezerwacji (np. Typeform, Google Forms). Jeśli zostawisz puste, przycisk może prowadzić do strony kontaktu.",
     }),
 
+    // --- ZDJĘCIE GŁÓWNE (Bez przycisku zatwierdź - inline) ---
     defineField({
       name: "mainImage",
       title: "Zdjęcie Główne",
       type: "image",
       group: "content",
-      options: { hotspot: true },
-      fields: [{ name: "alt", type: "string", title: "Alt tekst" }],
+      options: {
+        hotspot: false,
+        // @ts-expect-error - custom option
+        hideModalUI: true, // Ukrywa przycisk
+      },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Tekst alternatywny (Alt)",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+      components: {
+        input: WebPCompressor,
+      },
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "shortDescription",
       title: "Krótki opis (na kartę)",
@@ -121,6 +138,7 @@ export const trip = defineType({
       rows: 3,
       validation: (Rule) => Rule.max(220),
     }),
+
     defineField({
       name: "content",
       title: "Pełny opis wyprawy",
@@ -138,8 +156,36 @@ export const trip = defineType({
           ],
           lists: [{ title: "Lista", value: "bullet" }],
         },
+        // Zdjęcie w treści (tutaj przycisk zatwierdź jest potrzebny, bo to modal wewnątrz Portable Text)
+        {
+          type: "image",
+          name: "image",
+          title: "Zdjęcie (WebP)",
+          options: {
+            forceModalUI: true, // <--- WYMUSZAMY PRZYCISK
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+              description: "Ważne dla SEO i dostępności",
+              validation: (Rule) =>
+                Rule.required().warning("Warto dodać opis zdjęcia dla SEO"),
+            },
+            {
+              name: "caption",
+              type: "string",
+              title: "Podpis pod zdjęciem",
+            },
+          ],
+          components: {
+            input: WebPCompressor,
+          },
+        },
       ],
     }),
+
     defineField({
       name: "highlights",
       title: "Atuty wyprawy (Checklist)",
@@ -150,7 +196,47 @@ export const trip = defineType({
       initialValue: ["Polski pilot", "Małe grupy", "Hotele 4*"],
     }),
 
-    // --- GRUPA: FAQ ---
+    // --- POPRAWIONA GALERIA (Z PRZYCISKIEM ZATWIERDŹ) ---
+    defineField({
+      name: "gallery",
+      title: "Galeria zdjęć (Karuzela)",
+      description:
+        "Opcjonalna sekcja. Jeśli dodasz zdjęcia, musisz dodać ich minimum 9, aby karuzela działała płynnie.",
+      type: "array",
+      group: "content",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: false,
+
+            forceModalUI: true, // <--- KLUCZOWA ZMIANA: To włącza przycisk w Galerii
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+            },
+          ],
+          components: {
+            input: WebPCompressor,
+          },
+        },
+      ],
+      validation: (Rule) =>
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Rule.custom((gallery: any) => {
+          if (!gallery || gallery.length === 0) {
+            return true;
+          }
+          if (gallery.length < 9) {
+            return "Karuzela wymaga minimum 9 zdjęć, aby wyglądać dobrze (zalecane 11+).";
+          }
+          return true;
+        }),
+    }),
+
     defineField({
       name: "faq",
       title: "Najczęściej zadawane pytania (FAQ)",
@@ -167,6 +253,7 @@ export const trip = defineType({
         },
       ],
     }),
+
     defineField({
       name: "seoTitle",
       title: "Tytuł SEO (Meta Title)",
@@ -200,6 +287,8 @@ export const trip = defineType({
       description:
         "Oddzielone przecinkami (np. wycieczka chiny, syczuan 2026).",
     }),
+
+    // --- OG IMAGE (Bez przycisku zatwierdź) ---
     defineField({
       name: "ogImage",
       title: "Grafika udostępniania (Open Graph Image)",
@@ -207,7 +296,21 @@ export const trip = defineType({
       group: "seo",
       description:
         "Obraz widoczny po wklejeniu linku na FB/IG. Jeśli puste, system użyje zdjęcia głównego.",
-      options: { hotspot: true },
+      options: {
+        hotspot: false,
+        // @ts-expect-error - custom option
+        hideModalUI: true, // Ukrywa przycisk
+      },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Tekst alternatywny (Alt)",
+        }),
+      ],
+      components: {
+        input: WebPCompressor,
+      },
     }),
   ],
 

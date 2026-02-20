@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { BookText } from "lucide-react";
+import { WebPCompressor } from "../components/WebPCompressor"; // <--- IMPORT
 
 export const post = defineType({
   name: "post",
@@ -30,13 +31,31 @@ export const post = defineType({
       type: "datetime",
       group: "content",
     }),
+
+    // --- ZDJĘCIE GŁÓWNE (Inline - bez przycisku Zatwierdź) ---
     defineField({
       name: "mainImage",
       title: "Zdjęcie główne",
       type: "image",
       group: "content",
-      options: { hotspot: true },
+      options: {
+        hotspot: false, // Wyłączamy kadrowanie
+        // @ts-expect-error - custom option
+        hideModalUI: true, // Ukrywamy przycisk "Zatwierdź" (tryb inline)
+      },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Tekst alternatywny (Alt)",
+          validation: (Rule) => Rule.required(),
+        }),
+      ],
+      components: {
+        input: WebPCompressor,
+      },
     }),
+
     defineField({
       name: "excerpt",
       title: "Krótki opis (Wstęp)",
@@ -57,12 +76,41 @@ export const post = defineType({
       type: "string",
       group: "content",
     }),
+
+    // --- TREŚĆ ARTYKUŁU (Portable Text) ---
     defineField({
       name: "body",
       title: "Treść artykułu",
       type: "array",
       group: "content",
-      of: [{ type: "block" }, { type: "image" }],
+      of: [
+        { type: "block" },
+        // Zdjęcie wewnątrz tekstu (Modal - z przyciskiem Zatwierdź)
+        {
+          type: "image",
+          options: {
+            hotspot: false,
+
+            forceModalUI: true, // Wymuszamy przycisk "Zatwierdź" (bo to pop-up)
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: "caption",
+              type: "string",
+              title: "Podpis pod zdjęciem",
+            },
+          ],
+          components: {
+            input: WebPCompressor,
+          },
+        },
+      ],
     }),
 
     defineField({

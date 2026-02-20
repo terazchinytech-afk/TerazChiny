@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity";
 import { Search } from "lucide-react";
+import { WebPCompressor } from "../components/WebPCompressor"; // <--- IMPORT
 
 export const blogPage = defineType({
   name: "blogPage",
@@ -36,12 +37,29 @@ export const blogPage = defineType({
           of: [{ type: "string" }],
           options: { layout: "tags" },
         }),
+
+        // --- ZMODYFIKOWANE POLE OG IMAGE ---
         defineField({
           name: "ogImage",
           title: "Obrazek Udostępniania",
           type: "image",
           description:
             "Zdjęcie widoczne przy wklejaniu linku do bloga na FB/IG.",
+          options: {
+            hotspot: false, // Wyłączamy kadrowanie
+            // @ts-expect-error - custom option
+            hideModalUI: true, // Uproszczony widok
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
         }),
       ],
     }),

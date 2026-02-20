@@ -9,7 +9,6 @@ import { ContactSection } from "./components/sections/ContactSection";
 import { Footer } from "./components/Footer";
 import { getLandingPageData } from "./lib/api";
 import { ProcessSection } from "./components/sections/ProcessSection";
-import { GallerySection } from "./components/sections/GallerySection";
 
 export async function generateMetadata(): Promise<Metadata> {
   const sanityData = await getLandingPageData();
@@ -78,7 +77,7 @@ export default async function Home() {
       <CalendarSection data={sanityData.calendarSection} />
       <ProcessSection data={sanityData.processSection} />
       <TestimonialsSection data={sanityData.testimonialsSection} />
-      <GallerySection data={sanityData.gallerySection} />
+      {/* <GallerySection data={sanityData.gallerySection} /> */}
       <BlogSection
         headerData={sanityData.blogSection}
         posts={sanityData.blogSection?.latestPosts || []}

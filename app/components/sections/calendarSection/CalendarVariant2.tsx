@@ -155,7 +155,7 @@ export const CalendarVariant2 = ({
             <button
               onClick={handlePrevYear}
               disabled={selectedYear !== 0 && selectedYear <= currentYear}
-              className={`w-10 h-10 max-[390px]:w-8 max-[390px]:h-8 flex items-center justify-center rounded-xl border border-gray-200 bg-white transition-colors shadow-sm pointer-cursor
+              className={`w-10 h-10 cursor-pointer max-[390px]:w-8 max-[390px]:h-8 flex items-center justify-center rounded-xl border border-gray-200 bg-white transition-colors shadow-sm pointer-cursor
                         ${selectedYear === 0 || selectedYear > currentYear ? "text-gray-500" : "text-gray-300 opacity-50"}`}
             >
               <ChevronLeft
@@ -207,14 +207,14 @@ export const CalendarVariant2 = ({
             <button
               onClick={handlePrevYear}
               disabled={selectedYear !== 0 && selectedYear <= currentYear}
-              className={`w-11 h-11 flex items-center justify-center rounded-xl border border-gray-200 bg-white transition-colors shadow-sm pointer-cursor
-                        ${selectedYear === 0 || selectedYear > currentYear ? "text-gray-500" : "text-gray-300 cursor-not-allowed opacity-50"}`}
+              className={`w-11 h-11 flex items-center justify-center rounded-xl border border-gray-200 bg-white transition-colors shadow-sm cursor-pointer
+                        ${selectedYear === 0 || selectedYear > currentYear ? "text-gray-500" : "text-gray-300 !cursor-default  opacity-50"}`}
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNextYear}
-              className="w-11 h-11 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-400 hover:border-[#b32a2e] hover:text-[#b32a2e] transition-colors shadow-sm pointer-cursor"
+              className="w-11 h-11 flex items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-400 hover:border-[#b32a2e] hover:text-[#b32a2e] transition-colors shadow-sm cursor-pointer"
             >
               <ChevronRight size={20} />
             </button>
@@ -260,7 +260,7 @@ export const CalendarVariant2 = ({
                   <button
                     id={`month-${item.year}-${item.value}`}
                     onClick={() => handleMonthClick(item.value, item.year)}
-                    className={`relative shrink-0 ${CARD_SIZE_CLASSES} rounded-2xl pointer-cursor snap-center flex flex-col items-center justify-center outline-none group transition-transform active:scale-95`}
+                    className={`relative shrink-0 ${CARD_SIZE_CLASSES} rounded-2xl cursor-pointer snap-center flex flex-col items-center justify-center outline-none group transition-transform active:scale-95`}
                   >
                     {isActive && (
                       <motion.div

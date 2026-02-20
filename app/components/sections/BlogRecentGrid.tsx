@@ -91,14 +91,14 @@ export const BlogRecentGrid = ({ posts }: { posts: any[] }) => {
             >
               <div className="max-[1200px]:hidden">
                 <Image
-                  src={"/symbol.svg"}
+                  src={"/symbol.webp"}
                   width={180}
                   height={180}
                   className="absolute -top-10 -right-10 opacity-40 rotate-12"
                   alt=""
                 />
                 <Image
-                  src={"/smok.svg"}
+                  src={"/smok.webp"}
                   width={200}
                   height={110}
                   className="absolute -top-24 -left-20 opacity-30"

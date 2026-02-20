@@ -61,9 +61,4 @@ export const structure: StructureResolver = (S) =>
         .title("Blog")
         .icon(BookOpen)
         .child(S.documentTypeList("post").title("Artykuły")),
-
-      S.listItem().title("Galeria Zdjęć").icon(Images).child(
-        // Wyświetlamy po prostu listę dokumentów typu "galleryYear"
-        S.documentTypeList("galleryYear").title("Wybierz Rok"),
-      ),
     ]);

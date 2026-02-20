@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { label: "Strona Główna", href: "/" },
   { label: "Kalendarz", href: "/kalendarz-wypraw" },
-  { label: "Galeria", href: "/galeria-zdjec" },
+
   { label: "Blog", href: "/blog" },
   { label: "Kontakt", href: "/#kontakt" },
 ];

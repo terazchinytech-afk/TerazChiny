@@ -11,33 +11,27 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, X, ZoomIn, Calendar } from "lucide-react";
-import Link from "next/link";
+import { X, ZoomIn, Calendar } from "lucide-react";
 
 // --- TYPY ---
-interface SanityGalleryImage {
+export interface SanityGalleryImage {
   alt: string | null;
   id: string | null;
-  tag: string | null; // To jest rok
+  tag: string | null; // Rok
   url: string | null;
 }
 
-interface GallerySectionProps {
-  data: {
-    title: string;
-    description?: string;
-    selectedImages: SanityGalleryImage[];
-    ctaText?: string;
-  };
+interface InfinitePhotoCarouselProps {
+  images: SanityGalleryImage[];
 }
 
 // --- HELPERY (Automatyczny układ) ---
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const organizeIntoColumns = (images: SanityGalleryImage[]) => {
   const columns: any[] = [];
   let buffer: SanityGalleryImage[] = [];
 
-  // Algorytm: Co trzecie zdjęcie jest duże (Tall), reszta to pary (Split)
-  // Wzór: [Tall] -> [Split + Split] -> [Tall]...
+  // Algorytm: [Tall] -> [Split + Split] -> [Tall]...
   images.forEach((img, index) => {
     const isTall = index % 3 === 0;
 
@@ -77,14 +71,14 @@ const ImageCard = ({
 }) => (
   <motion.div
     layoutId={layoutId}
-    className={`relative overflow-hidden rounded-2xl cursor-pointer group !bg-[#fff] ${className} `}
+    className={`relative overflow-hidden rounded-2xl cursor-pointer group ${className}  select-none inter-cursor`}
     onClick={onClick}
     whileHover={{ scale: 0.98 }}
     transition={{ duration: 0.3 }}
   >
     <Image
       src={img.url!}
-      alt={img.alt || "Zdjęcie z wyprawy"}
+      alt={img.alt || "Zdjęcie"}
       fill
       className="object-cover transition-transform duration-700 group-hover:scale-110 pointer-events-none"
       sizes="(max-width: 768px) 50vw, 33vw"
@@ -92,9 +86,9 @@ const ImageCard = ({
 
     {/* Tag z rokiem na hoverze */}
     <div className="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <div className="bg-brand-red/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
-        <Calendar size={10} className="text-gold" />
-        <span className="text-white font-bold text-[10px] uppercase tracking-wider montserrat">
+      <div className="bg-[#b32a2e]/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1.5 border border-white/20">
+        <Calendar size={10} className="text-[#efd075]" />
+        <span className="text-white font-bold text-[10px] uppercase tracking-wider font-montserrat">
           {img.tag}
         </span>
       </div>
@@ -102,14 +96,16 @@ const ImageCard = ({
 
     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
       <div className="bg-white/90 p-3 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-        <ZoomIn size={20} className="text-brand-red" />
+        <ZoomIn size={20} className="text-[#b32a2e]" />
       </div>
     </div>
   </motion.div>
 );
 
-// --- GŁÓWNA SEKCJA ---
-export const GallerySection = ({ data }: GallerySectionProps) => {
+// --- GŁÓWNY KOMPONENT ---
+export const InfinitePhotoCarousel = ({
+  images,
+}: InfinitePhotoCarouselProps) => {
   const [selectedImage, setSelectedImage] = useState<{
     data: SanityGalleryImage;
     layoutId: string;
@@ -119,8 +115,8 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
 
   // 1. Filtrujemy dane (usuwamy wpisy bez URL i ID)
   const validImages = useMemo(() => {
-    return data.selectedImages.filter((img) => img.url && img.id);
-  }, [data.selectedImages]);
+    return images.filter((img) => img.url && img.id);
+  }, [images]);
 
   // 2. Organizujemy w kolumny
   const columns = useMemo(
@@ -131,6 +127,7 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
   // 3. Powielamy dla efektu Marquee
   const repeatedColumns = useMemo(() => {
     if (columns.length === 0) return [];
+    // Jeśli zdjęć jest mało, powielamy więcej razy, żeby wypełnić ekran
     const repeatCount = validImages.length < 6 ? 8 : 4;
     return Array(repeatCount).fill(columns).flat();
   }, [columns, validImages]);
@@ -160,43 +157,16 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
   if (validImages.length === 0) return null;
 
   return (
-    <section className="bg-white py-24 lg:py-32 overflow-hidden relative">
-      <div className="container mx-auto px-4 mb-16 text-center relative z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full shadow-sm text-xs font-bold uppercase tracking-widest text-white bg-brand-red mb-5">
-          <span className="text-white font-black tracking-[1px] uppercase text-[10px]">
-            Wspomnienia
-          </span>
-        </div>
-
-        <h2 className="text-4xl lg:text-5xl font-montserrat font-black text-brand-red mb-6 relative z-10">
-          {data.title.split(" ").slice(0, -1).join(" ")}{" "}
-          <span className="relative inline-block px-1">
-            {data.title.split(" ").slice(-1)}
-            <motion.span
-              initial={{ width: 0 }}
-              whileInView={{ width: "100%" }}
-              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-              className="absolute bottom-[-1px] left-0 h-[12px] bg-gold -z-10"
-            />
-          </span>
-        </h2>
-
-        {data.description && (
-          <p className="text-neutral-500 max-w-2xl mx-auto font-medium">
-            {data.description}
-          </p>
-        )}
-      </div>
-
+    <>
       {/* --- MARQUEE CONTAINER --- */}
       <div
-        className="relative w-full h-[500px] lg:h-[600px] flex items-center mb-16 cursor-grab active:cursor-grabbing touch-pan-y"
+        className="relative w-full h-[500px] lg:h-[600px] flex items-center cursor-grab active:cursor-grabbing touch-pan-y overflow-hidden "
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div className="hidden min-[700px]:block absolute inset-0 z-20 pointer-events-none [mask-image:linear-gradient(to_right,white_0%,transparent_15%,transparent_85%,white_100%)] bg-white/0" />
-        <div className="hidden min-[700px]:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
-        <div className="hidden min-[700px]:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
+        <div className="hidden min-[700px]:block absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#fff] to-transparent z-20 pointer-events-none" />
+        <div className="hidden min-[700px]:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#fff] to-transparent z-20 pointer-events-none" />
 
         <motion.div
           className="flex gap-6 pl-6 w-max"
@@ -265,24 +235,6 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
         </motion.div>
       </div>
 
-      {/* --- BUTTON --- */}
-      <div className="flex justify-center relative z-20">
-        <Link
-          href={"/galeria-zdjec"}
-          className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg bg-brand-red px-10 py-4 font-bold text-white shadow-lg transition-shadow duration-300 hover:shadow-xl pointer-cursor"
-        >
-          <span className="font-montserrat text-[11px] font-bold uppercase tracking-widest transition-transform duration-300 group-hover:-translate-x-1">
-            {data.ctaText || "Zobacz wszystkie"}
-          </span>
-          <div className="relative flex w-0 overflow-hidden transition-all duration-300 ease-out group-hover:w-5">
-            <ArrowRight
-              size={18}
-              className="shrink-0 text-white opacity-0 -translate-x-full transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
-            />
-          </div>
-        </Link>
-      </div>
-
       {/* --- LIGHTBOX --- */}
       <AnimatePresence>
         {selectedImage && (
@@ -296,11 +248,11 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
             {/* Top Bar Lightbox */}
             <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-brand-red border border-gold flex items-center justify-center">
-                  <Calendar size={18} className="text-gold" />
+                <div className="w-10 h-10 rounded-full bg-[#b32a2e] border border-[#efd075] flex items-center justify-center">
+                  <Calendar size={18} className="text-[#efd075]" />
                 </div>
                 <div>
-                  <p className="text-white font-bold montserrat">
+                  <p className="text-white font-bold font-montserrat">
                     {selectedImage.data.tag}
                   </p>
                   <p className="text-white/50 text-[10px] uppercase tracking-widest">
@@ -310,6 +262,10 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
               </div>
               <button
                 aria-label="Zamknij"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedImage(null);
+                }}
                 className="text-white/50 hover:text-white transition-colors bg-white/10 p-3 rounded-full backdrop-blur-md pointer-cursor"
               >
                 <X size={24} />
@@ -333,12 +289,12 @@ export const GallerySection = ({ data }: GallerySectionProps) => {
                 <h3 className="text-2xl font-black font-montserrat text-white drop-shadow-md">
                   {selectedImage.data.alt}
                 </h3>
-                <div className="w-12 h-1 bg-gold mx-auto mt-4 rounded-full" />
+                <div className="w-12 h-1 bg-[#efd075] mx-auto mt-4 rounded-full" />
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </>
   );
 };

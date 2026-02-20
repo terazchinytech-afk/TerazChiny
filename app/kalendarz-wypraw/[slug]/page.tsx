@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { PortableText, PortableTextComponents } from "@portabletext/react";
@@ -10,13 +11,23 @@ import { TripFAQ } from "@/app/components/sections/TripFaq";
 
 import { getTripBySlug } from "@/app/lib/api";
 import { MobileBookingManager } from "@/app/components/sections/singleTrip/MobileBookingManager";
+import Image from "next/image";
+import { urlFor } from "@/app/lib/sanity";
+import {
+  InfinitePhotoCarousel,
+  SanityGalleryImage,
+} from "@/app/components/InfinitePhotoCarousel";
 
 interface PageProps {
   params: Promise<{
     slug: string;
   }>;
 }
-
+const getImageDimensions = (ref: string) => {
+  const dimensions = ref.split("-")[2]; // bierze "1216x1824"
+  const [width, height] = dimensions.split("x").map(Number);
+  return { width, height };
+};
 const portableTextComponents: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
@@ -63,6 +74,45 @@ const portableTextComponents: PortableTextComponents = {
         {children}
       </a>
     ),
+  },
+  types: {
+    image: ({ value }) => {
+      // Sprawdzamy, czy mamy dane assetu
+      if (!value?.asset?._ref) {
+        return null;
+      }
+
+      // 1. Generujemy URL
+      const imageUrl = urlFor(value).url();
+
+      // 2. Wyciągamy proporcje z nazwy pliku (dla optymalizacji Next Image)
+      const { width, height } = getImageDimensions(value.asset._ref);
+
+      return (
+        <figure className="my-10 flex flex-col items-center">
+          <div className="relative rounded-2xl overflow-hidden shadow-lg border border-gray-100 bg-gray-50">
+            <Image
+              src={imageUrl}
+              alt={value.alt || "Zdjęcie z wyprawy"}
+              width={width} // Oryginalna szerokość
+              height={height} // Oryginalna wysokość
+              // Opcjonalnie: placeholder "blur" jeśli chcesz
+              placeholder="blur"
+              blurDataURL={urlFor(value).width(20).quality(20).url()}
+              className="h-auto w-auto max-h-[600px] object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+            />
+          </div>
+
+          {/* Jeśli jest podpis (caption), wyświetl go */}
+          {value.caption && (
+            <figcaption className="mt-3 text-center text-sm text-gray-500 italic font-medium">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
   },
 };
 
@@ -134,7 +184,13 @@ export default async function TripDetailPage({ params }: PageProps) {
   const rawTrip = await getTripBySlug(slug);
 
   if (!rawTrip) notFound();
-
+  const galleryData: SanityGalleryImage[] =
+    rawTrip.gallery?.map((img: any, index: number) => ({
+      id: img.url, // Używamy URL jako unikalnego klucza
+      url: img.url,
+      alt: img.alt || `Zdjęcie z wyprawy ${rawTrip.title}`,
+      tag: rawTrip.year?.toString() || "Teraz Chiny", // Tag w rogu zdjęcia (np. rok wyprawy)
+    })) || [];
   const { year, dates } = formatDateDetails(rawTrip.date, rawTrip.duration);
 
   const trip = {
@@ -143,6 +199,7 @@ export default async function TripDetailPage({ params }: PageProps) {
     dates,
     image: rawTrip.mainImage || "/placeholder.jpg",
   };
+  console.log(trip.content);
 
   return (
     <div className="min-h-screen bg-[#ffffff] pb-32 lg:pb-20 relative">
@@ -199,7 +256,11 @@ export default async function TripDetailPage({ params }: PageProps) {
                 ))}
               </div>
             )}
-
+            {galleryData.length > 0 && (
+              <section className="mt-24 mb-16 100 pt-16">
+                <InfinitePhotoCarousel images={galleryData} />
+              </section>
+            )}
             {trip.faq && trip.faq.length > 0 && <TripFAQ faqData={trip.faq} />}
           </div>
 

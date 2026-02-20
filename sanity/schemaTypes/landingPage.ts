@@ -7,14 +7,12 @@ import {
   HelpCircle,
   Phone,
   LayoutTemplate,
-  Image as ImageIcon,
   MessageSquare,
   Anchor,
   Search,
   Footprints,
 } from "lucide-react";
-import { MultiGalleryPicker } from "../components/MultiGalleryPicker";
-
+import { WebPCompressor } from "../components/WebPCompressor";
 export const landingPage = defineType({
   name: "landingPage",
   title: "Strona Główna (Landing)",
@@ -27,7 +25,7 @@ export const landingPage = defineType({
     { name: "calendar", title: "Kalendarz", icon: Calendar },
     { name: "what_next", title: "Co dalej?", icon: Footprints },
     { name: "testimonials", title: "Opinie", icon: MessageSquare },
-    { name: "gallery", title: "Galeria", icon: ImageIcon },
+
     { name: "blog", title: "Blog", icon: BookOpen },
     { name: "faq", title: "FAQ", icon: HelpCircle },
     { name: "contact", title: "Kontakt", icon: Phone },
@@ -139,6 +137,8 @@ export const landingPage = defineType({
             },
           ],
         }),
+        // ... wewnątrz aboutSection -> fields ...
+
         defineField({
           name: "images",
           title: "Zdjęcia (Górny blok)",
@@ -148,15 +148,62 @@ export const landingPage = defineType({
               name: "mainImage",
               title: "Zdjęcie Główne",
               type: "image",
-              options: { hotspot: true },
+              options: {
+                hotspot: false, // <--- WYŁĄCZAMY TO GÓWNO
+              },
+              fields: [
+                defineField({
+                  name: "alt",
+                  type: "string",
+                  title: "Tekst alternatywny (Alt)",
+                  validation: (Rule) => Rule.required(),
+                }),
+              ],
+              components: {
+                input: WebPCompressor,
+              },
             }),
             defineField({
               name: "secondaryImage",
               title: "Zdjęcie Małe",
               type: "image",
-              options: { hotspot: true },
+              options: {
+                hotspot: false, // <--- WYŁĄCZAMY
+              },
+              fields: [
+                defineField({
+                  name: "alt",
+                  type: "string",
+                  title: "Tekst alternatywny (Alt)",
+                }),
+              ],
+              components: {
+                input: WebPCompressor,
+              },
             }),
           ],
+        }),
+
+        // ... wewnątrz differentiation -> fields ...
+        defineField({
+          name: "sideImage",
+          title: "Zdjęcie po prawej stronie",
+          type: "image",
+          options: {
+            hotspot: false, // <--- WYŁĄCZAMY
+          },
+          description:
+            "Zdjęcie, które pojawi się w dolnym bloku po prawej stronie.",
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
         }),
 
         defineField({
@@ -196,9 +243,21 @@ export const landingPage = defineType({
               name: "sideImage",
               title: "Zdjęcie po prawej stronie",
               type: "image",
-              options: { hotspot: true },
+              options: {
+                hotspot: false, // <--- WYŁĄCZAMY
+              },
               description:
                 "Zdjęcie, które pojawi się w dolnym bloku po prawej stronie.",
+              fields: [
+                defineField({
+                  name: "alt",
+                  type: "string",
+                  title: "Tekst alternatywny (Alt)",
+                }),
+              ],
+              components: {
+                input: WebPCompressor,
+              },
             }),
           ],
         }),
@@ -475,83 +534,7 @@ export const landingPage = defineType({
         }),
       ],
     }),
-    defineField({
-      name: "gallerySection",
-      title: "Sekcja Galeria (Przewijak)",
-      type: "object",
-      group: "gallery",
-      fields: [
-        defineField({
-          name: "tag",
-          title: "Tag sekcji",
-          type: "string",
-          initialValue: "Wspomnienia",
-        }),
-        defineField({
-          name: "title",
-          title: "Nagłówek",
-          type: "string",
-          initialValue: "Galeria z naszych wypraw",
-        }),
-        defineField({
-          name: "description",
-          title: "Opis",
-          type: "text",
-          rows: 3,
-        }),
 
-        // --- MULTI-PICKER ---
-        defineField({
-          name: "selectedImages",
-          title: "Wybrane zdjęcia",
-          description:
-            "Kliknij poniżej, aby zarządzać zdjęciami na stronie głównej.",
-          type: "array",
-          // Podpinamy nasz Custom Input
-          components: {
-            input: MultiGalleryPicker,
-          },
-          of: [
-            {
-              type: "object",
-              name: "galleryImageWrapper",
-              fields: [
-                // Tutaj zapisujemy ID
-                defineField({ name: "reference", type: "string" }),
-                // Tutaj zapisujemy ROK (TAG)
-                defineField({ name: "tag", title: "Rok", type: "string" }),
-              ],
-              // Podgląd w liście (jeśli kiedyś wyłączysz custom input)
-              preview: {
-                select: { title: "tag", subtitle: "reference" },
-                prepare({ title, subtitle }) {
-                  return {
-                    title: `Rok: ${title}`,
-                    subtitle: subtitle,
-                  };
-                },
-              },
-            },
-          ],
-          // Używamy customowej walidacji dla pewności
-          validation: (Rule) =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            Rule.custom((value: any) => {
-              if (!value) return "Musisz dodać zdjęcia.";
-              if (value.length < 9) {
-                return `Wybrano ${value.length} z 9 wymaganych zdjęć. Brakuje jeszcze ${9 - value.length}.`;
-              }
-              return true;
-            }).error(), // .error() blokuje publikację (czerwony komunikat)
-        }),
-
-        defineField({
-          name: "ctaText",
-          title: "Tekst przycisku",
-          type: "string",
-        }),
-      ],
-    }),
     defineField({
       name: "blogSection",
       title: "Sekcja Blog",
@@ -661,11 +644,27 @@ export const landingPage = defineType({
       type: "object",
       group: "contact",
       fields: [
+        // 1. TŁO (Hero Image) z WebP + Alt + Simplified UI
         defineField({
           name: "heroImage",
-          title: "Zdjęcie Główne",
+          title: "Zdjęcie Główne (Tło)",
           type: "image",
-          options: { hotspot: true },
+          options: {
+            hotspot: false,
+            // @ts-expect-error - custom option for your component
+            hideModalUI: true,
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
         }),
 
         defineField({
@@ -695,15 +694,32 @@ export const landingPage = defineType({
           type: "text",
           rows: 3,
         }),
+
         defineField({
           name: "contactCard",
           title: "Wizytówka",
           type: "object",
           fields: [
+            // 2. LOGO NA KARCIE z WebP + Alt + Simplified UI
             defineField({
               name: "cardLogo",
-              title: "Logo na karcie",
+              title: "Logo na karcie (Obok formularza)",
               type: "image",
+              options: {
+                hotspot: false,
+                // @ts-expect-error - custom option
+                hideModalUI: true,
+              },
+              fields: [
+                defineField({
+                  name: "alt",
+                  type: "string",
+                  title: "Tekst alternatywny (Alt)",
+                }),
+              ],
+              components: {
+                input: WebPCompressor,
+              },
             }),
             defineField({ name: "email", title: "Email", type: "string" }),
             defineField({ name: "phone", title: "Telefon", type: "string" }),
@@ -792,12 +808,30 @@ export const landingPage = defineType({
           description:
             "Wpisz słowa kluczowe i naciśnij Enter. Np. 'wycieczki do Chin', 'wakacje azja'",
         }),
+
+        // --- ZMODYFIKOWANE POLE OG IMAGE ---
         defineField({
           name: "ogImage",
           title: "Obrazek Udostępniania (Social Media)",
           type: "image",
           description:
             "Obrazek widoczny po wklejeniu linku na FB/LinkedIn. Zalecane 1200x630px.",
+          options: {
+            hotspot: false, // Wyłączamy kadrowanie
+            // @ts-expect-error - custom option
+            hideModalUI: true, // Uproszczony widok
+          },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Tekst alternatywny (Alt)",
+              description: "Opis obrazka dla robotów (opcjonalne dla OG Image)",
+            }),
+          ],
+          components: {
+            input: WebPCompressor,
+          },
         }),
       ],
     }),
